@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @AllArgsConstructor
-public class GroupController {
+public class   GroupController {
     private final GroupService service;
 
     @PostMapping("/group")

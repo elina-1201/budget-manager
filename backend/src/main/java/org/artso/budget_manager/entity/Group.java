@@ -19,7 +19,6 @@ public class Group {
     public String getName() {
         return name.toUpperCase(Locale.ROOT);
     }
-
     public void setName(String name) {
         this.name = name.toUpperCase(Locale.ROOT);
     }
