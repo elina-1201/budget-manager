@@ -25,10 +25,10 @@ public class Item {
     private String description;
     @Min(0)
     private BigDecimal amount;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private String category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id")
+//    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -40,5 +40,5 @@ public class Item {
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    private Set<Group> sharedGroups;
+    private Set<UserGroup> sharedGroups;
 }

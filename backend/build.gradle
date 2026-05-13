@@ -24,7 +24,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	// PostgreSQL driver for production
 	runtimeOnly 'org.postgresql:postgresql'
+	// H2 driver for local development fallback (used when DB_URL is not provided)
+	runtimeOnly 'com.h2database:h2'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

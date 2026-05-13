@@ -2,7 +2,7 @@ package org.artso.budget_manager.service;
 
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.entity.AppUser;
-import org.artso.budget_manager.entity.Group;
+import org.artso.budget_manager.entity.UserGroup;
 import org.artso.budget_manager.repository.AppUserRepo;
 import org.artso.budget_manager.repository.GroupRepo;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class GroupService {
     final GroupRepo groupRepo;
     final AppUserRepo userRepo;
 
-    public void createGroup(Group request, Authentication auth) {
+    public void createGroup(UserGroup request, Authentication auth) {
         if (groupRepo.existsByName(request.getName())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         } else {
@@ -30,7 +29,7 @@ public class GroupService {
             List<AppUser> users = new ArrayList<>();
             users.add(author);
 
-            Group group = new Group();
+            UserGroup group = new UserGroup();
             group.setName(request.getName());
             group.setUsers(request.getUsers());
             groupRepo.save(group);

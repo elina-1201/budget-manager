@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Group {
+public class UserGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

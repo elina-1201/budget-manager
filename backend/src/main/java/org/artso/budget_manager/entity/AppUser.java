@@ -22,12 +22,15 @@ public class AppUser {
     @Size(min = 8)
     private String password;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Category> categories;
+
     @ManyToMany()
     @JoinTable(
             name = "groups",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private Set<Group> groups;
+    private Set<UserGroup> groups;
 
     @OneToMany(mappedBy = "author")
     private List<Item> items;

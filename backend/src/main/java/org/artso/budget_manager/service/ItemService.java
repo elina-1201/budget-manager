@@ -1,10 +1,11 @@
 package org.artso.budget_manager.service;
 
 import lombok.AllArgsConstructor;
-import org.artso.budget_manager.controller.ItemController;
+import org.artso.budget_manager.dto.ItemDto;
+import org.artso.budget_manager.dto.ItemRequest;
 import org.artso.budget_manager.entity.AppUser;
 import org.artso.budget_manager.entity.Category;
-import org.artso.budget_manager.entity.Group;
+import org.artso.budget_manager.entity.UserGroup;
 import org.artso.budget_manager.entity.Item;
 import org.artso.budget_manager.repository.AppUserRepo;
 import org.artso.budget_manager.repository.CategoryRepo;
@@ -16,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
@@ -28,9 +28,14 @@ public class ItemService {
     private final GroupRepo groupRepo;
     private final CategoryRepo categoryRepo;
 
-    @PreAuthorize("isAuthenticated()")
-    public Item createPersonalItem(ItemController.ItemRequest request,
-                                   Authentication auth) {
+//    TODO: refactor this to canCreate in ItemAuth
+    @PreAuthorize("isAuthenticated() and (" +
+            "#request.sharedGroupIds() == null or #request.sharedGroupIds().isEmpty() or " +
+            "@groupAuth.isMemberOfGroups(authentication, #request.sharedGroupIds())" +
+            ")"
+    )
+    public ItemDto createItem(ItemRequest request, Authentication auth) {
+        Set<UserGroup> sharedGroups;
 
         AppUser author = userRepo.findByEmail(auth.getName().toLowerCase())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -38,41 +43,24 @@ public class ItemService {
         Category category = categoryRepo.findById(request.categoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with id: " + request.categoryId() + " not found"));
 
-        Item item = Item.builder()
-                .name(request.name())
-                .description(request.description())
-                .amount(request.amount())
-                .category(category)
-                .author(author)
-                .sharedGroups(Collections.emptySet())
-                .build();
-        return repo.save(item);
-    }
-
-    /**
-     * Create an item and share it to one or more groups
-     * User must be a member of all groups they're sharing to
-     */
-    @PreAuthorize("isAuthenticated() and @groupAuth.isMemberOfGroups(authentication, #groupIds)")
-    public Item createSharedItem(ItemController.ItemRequest request, Set<Long> groupIds, Authentication auth) {
-        AppUser author = userRepo.findByEmail(auth.getName().toLowerCase())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        Set<Group> sharedGroups = (Set<Group>) groupRepo.findAllById(groupIds);
-        Category category = categoryRepo.findById(request.categoryId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with id: " + request.categoryId() + " not found"));
+        if(request.sharedGroupIds() == null || request.sharedGroupIds().isEmpty()) {
+            sharedGroups = Collections.emptySet();
+        }
+        else {
+            sharedGroups  = (Set<UserGroup>) groupRepo.findAllById(request.sharedGroupIds());
+        }
 
         Item item = Item.builder()
                 .name(request.name())
                 .description(request.description())
                 .amount(request.amount())
-                .category(category)
+                .category(category.getName())
                 .author(author)
                 .sharedGroups(sharedGroups)
                 .build();
 
-
-        return repo.save(item);
+        repo.save(item);
+        return ItemDto.toDto(item);
     }
 
 //    /**
@@ -118,7 +106,7 @@ public class ItemService {
         Item item = repo.findById(itemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Set<Group> sharedGroups = (Set<Group>) groupRepo.findAllById(groupIds);
+        Set<UserGroup> sharedGroups = (Set<UserGroup>) groupRepo.findAllById(groupIds);
 
         item.setSharedGroups(sharedGroups);
         return repo.save(item);

@@ -23,9 +23,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/register").permitAll()
                         .requestMatchers("/api/auth/token").authenticated()
-//                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()
 //                        for testing, remove when done
-                        .anyRequest().permitAll()
+//                        .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable) // allow modifying requests from tests
                 .sessionManagement(sessions ->
