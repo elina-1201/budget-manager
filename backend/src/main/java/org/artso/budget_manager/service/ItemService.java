@@ -7,6 +7,7 @@ import org.artso.budget_manager.entity.AppUser;
 import org.artso.budget_manager.entity.Category;
 import org.artso.budget_manager.entity.UserGroup;
 import org.artso.budget_manager.entity.Item;
+import org.artso.budget_manager.mapper.RequestItemToEntityMapper;
 import org.artso.budget_manager.repository.AppUserRepo;
 import org.artso.budget_manager.repository.CategoryRepo;
 import org.artso.budget_manager.repository.GroupRepo;
@@ -27,6 +28,7 @@ public class ItemService {
     private final AppUserRepo userRepo;
     private final GroupRepo groupRepo;
     private final CategoryRepo categoryRepo;
+    private final RequestItemToEntityMapper requestToEntityMapper;
 
 //    TODO: refactor this to canCreate in ItemAuth
     @PreAuthorize("isAuthenticated() and (" +
@@ -49,15 +51,20 @@ public class ItemService {
         else {
             sharedGroups  = (Set<UserGroup>) groupRepo.findAllById(request.sharedGroupIds());
         }
+        Item item = new Item();
+        requestToEntityMapper.mapFromRequestToEntity(request, item);
+        item.setAuthor(author);
+        item.setCategory(category.getName());
+        item.setSharedGroups(sharedGroups);
 
-        Item item = Item.builder()
-                .name(request.name())
-                .description(request.description())
-                .amount(request.amount())
-                .category(category.getName())
-                .author(author)
-                .sharedGroups(sharedGroups)
-                .build();
+//        Item item = Item.builder()
+//                .name(request.name())
+//                .description(request.description())
+//                .amount(request.amount())
+//                .category(category.getName())
+//                .author(author)
+//                .sharedGroups(sharedGroups)
+//                .build();
 
         repo.save(item);
         return ItemDto.toDto(item);
@@ -102,7 +109,7 @@ public class ItemService {
      */
 
     @PreAuthorize("@itemAuth.canEdit(authentication, #itemId) and @groupAuth.isMemberOfGroups(authentication, #groupIds)")
-    public Item shareItem(Long itemId, Set<Long> groupIds, Authentication auth) {
+    public Item shareItem(Long itemId, Set<Long> groupIds) {
         Item item = repo.findById(itemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
