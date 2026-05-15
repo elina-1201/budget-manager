@@ -26,4 +26,13 @@ public class ItemController {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }
     }
+
+    @GetMapping
+    public ResponseEntity<?> getItems(Authentication auth) {
+        try {
+            return new ResponseEntity<>(service.getPrivateItems(auth), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        }
+    }
 }

@@ -52,10 +52,6 @@ public class ItemAuth {
         return false;
     }
 
-    /**
-     * Can user edit/delete this item?
-     * Only if they are the author
-     */
     public boolean canEdit(Authentication auth, Long itemId) {
         if (auth == null || !auth.isAuthenticated()) {
             return false;
