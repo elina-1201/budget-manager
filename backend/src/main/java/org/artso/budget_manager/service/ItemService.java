@@ -30,12 +30,7 @@ public class ItemService {
     private final CategoryRepo categoryRepo;
     private final RequestItemToEntityMapper requestToEntityMapper;
 
-//    TODO: refactor this to canCreate in ItemAuth
-    @PreAuthorize("isAuthenticated() and (" +
-            "#request.sharedGroupIds() == null or #request.sharedGroupIds().isEmpty() or " +
-            "@groupAuth.isMemberOfGroups(authentication, #request.sharedGroupIds())" +
-            ")"
-    )
+    @PreAuthorize("@itemAuth.canCreate(authentication, #request)")
     public ItemDto createItem(ItemRequest request, Authentication auth) {
         Set<UserGroup> sharedGroups;
 
@@ -56,15 +51,6 @@ public class ItemService {
         item.setAuthor(author);
         item.setCategory(category.getName());
         item.setSharedGroups(sharedGroups);
-
-//        Item item = Item.builder()
-//                .name(request.name())
-//                .description(request.description())
-//                .amount(request.amount())
-//                .category(category.getName())
-//                .author(author)
-//                .sharedGroups(sharedGroups)
-//                .build();
 
         repo.save(item);
         return ItemDto.toDto(item);

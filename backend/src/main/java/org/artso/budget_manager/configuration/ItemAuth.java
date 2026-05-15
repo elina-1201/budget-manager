@@ -1,17 +1,30 @@
 package org.artso.budget_manager.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.artso.budget_manager.dto.ItemRequest;
 import org.artso.budget_manager.entity.Item;
 import org.artso.budget_manager.repository.GroupRepo;
 import org.artso.budget_manager.repository.ItemRepo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component("itemAuth")
 @RequiredArgsConstructor
 public class ItemAuth {
     private final ItemRepo itemRepo;
     private final GroupRepo groupRepo;
+    private final GroupAuth groupAuth;
+
+    public boolean canCreate(Authentication auth, ItemRequest request) {
+        if (auth == null || !auth.isAuthenticated() || request == null) {
+            return false;
+        }
+
+        Set<Long> sharedGroupIds = request.sharedGroupIds();
+        return sharedGroupIds == null || sharedGroupIds.isEmpty() || groupAuth.isMemberOfGroups(auth, sharedGroupIds);
+    }
 
     public boolean canAccess(Authentication auth, Long itemId) {
         if (auth == null || !auth.isAuthenticated()) {
