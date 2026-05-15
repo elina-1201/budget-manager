@@ -10,8 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -26,12 +26,12 @@ public class GroupService {
             AppUser author = userRepo.findByEmail(auth.getName())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email: " + auth.getName() + " not found"));
 
-            List<AppUser> users = new ArrayList<>();
+            Set<AppUser> users = new HashSet<>();
             users.add(author);
 
             UserGroup group = new UserGroup();
             group.setName(request.getName());
-            group.setUsers(request.getUsers());
+            group.setUsers(users);
             groupRepo.save(group);
         }
     }
