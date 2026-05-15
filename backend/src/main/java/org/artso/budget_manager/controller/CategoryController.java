@@ -6,10 +6,7 @@ import org.artso.budget_manager.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
@@ -25,6 +22,16 @@ public class CategoryController {
         try {
             service.addCategory(categoryName.get("name"), auth);
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (
+                ResponseStatusException e) {
+            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getCategories(Authentication auth) {
+        try {
+            return new ResponseEntity<>(service.getCategories(auth), HttpStatus.OK);
         } catch (
                 ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
