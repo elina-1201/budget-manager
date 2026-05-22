@@ -295,7 +295,7 @@ class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(invalidRefreshRequest))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$").value("Invalid refresh token"));
+                .andExpect(jsonPath("$.message").value("Invalid token"));
     }
 
     @Test

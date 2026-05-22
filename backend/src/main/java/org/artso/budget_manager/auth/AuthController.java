@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
@@ -30,13 +29,9 @@ public class AuthController {
 //    static final int REFRESH_EXP = 50;
 
     @PostMapping("/register")
-    ResponseEntity<?> registerUser(@Valid @RequestBody AppUser appUser) {
-        try {
-            service.addUser(appUser);
-            return new ResponseEntity<>(appUser, HttpStatus.CREATED);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        }
+    ResponseEntity<AppUser> registerUser(@Valid @RequestBody AppUser appUser) {
+        service.addUser(appUser);
+        return new ResponseEntity<>(appUser, HttpStatus.CREATED);
     }
 
     String getJwtToken(String subject, String type, List<String> authorities) {
@@ -65,20 +60,15 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> getRefreshToken(@Valid @RequestBody RefreshTokenRequest request) {
-        try {
-            var jwt = jwtDecoder.decode(request.refreshToken());
+    public ResponseEntity<TokenResponse> getRefreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        var jwt = jwtDecoder.decode(request.refreshToken());
 
-            String subject = jwt.getSubject();
-            List<String> authorities = jwt.getClaimAsStringList("scope");
+        String subject = jwt.getSubject();
+        List<String> authorities = jwt.getClaimAsStringList("scope");
 
-            String accessToken = getJwtToken(subject, "access", authorities);
-            String refreshToken = getJwtToken(subject, "refresh", authorities);
+        String accessToken = getJwtToken(subject, "access", authorities);
+        String refreshToken = getJwtToken(subject, "refresh", authorities);
 
-            return new ResponseEntity<>(new TokenResponse(accessToken, refreshToken), HttpStatus.OK);
-
-        } catch (JwtException e) {
-            return new ResponseEntity<>("Invalid refresh token", HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<>(new TokenResponse(accessToken, refreshToken), HttpStatus.OK);
     }
 }

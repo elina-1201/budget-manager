@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -17,21 +18,13 @@ public class ItemController {
     private final ItemService service;
 
     @PostMapping
-    public ResponseEntity<?> createItem(@RequestBody @Valid ItemRequest requestItem, Authentication auth) {
-        try {
-            ItemDto itemDto = service.createItem(requestItem, auth);
-            return new ResponseEntity<>(itemDto, HttpStatus.CREATED);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        }
+    public ResponseEntity<ItemDto> createItem(@RequestBody @Valid ItemRequest requestItem, Authentication auth) {
+        ItemDto itemDto = service.createItem(requestItem, auth);
+        return new ResponseEntity<>(itemDto, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getItems(Authentication auth) {
-        try {
-            return new ResponseEntity<>(service.getAllItems(auth), HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        }
+    public ResponseEntity<List<ItemDto>> getItems(Authentication auth) {
+        return new ResponseEntity<>(service.getAllItems(auth), HttpStatus.OK);
     }
 }
