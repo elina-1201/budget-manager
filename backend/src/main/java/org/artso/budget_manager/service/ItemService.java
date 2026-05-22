@@ -2,7 +2,7 @@ package org.artso.budget_manager.service;
 
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.dto.ItemDto;
-import org.artso.budget_manager.dto.ItemRequest;
+import org.artso.budget_manager.dto.request_and_response.ItemRequest;
 import org.artso.budget_manager.entity.AppUser;
 import org.artso.budget_manager.entity.Category;
 import org.artso.budget_manager.entity.UserGroup;
@@ -57,46 +57,13 @@ public class ItemService {
         return ItemDto.toDto(item);
     }
 
-    public List<ItemDto> getPrivateItems(Authentication auth) {
+    public List<ItemDto> getAllItems(Authentication auth) {
         AppUser user = userRepo.findByEmail(auth.getName().toLowerCase())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         List<Item> items = itemRepo.findAllByAuthor(user);
         return ItemDto.toDTOList(items);
     }
-
-//    /**
-//     * View an item (user must have access)
-//     */
-//    @PreAuthorize("@itemAuth.canAccess(authentication, #itemId)")
-//    public Item getItem(Long itemId) {
-//        return itemRepo.findById(itemId)
-//            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//    }
-
-//    /**
-//     * Edit an item (only author can edit)
-//     */
-//    @PreAuthorize("@itemAuth.canEdit(authentication, #itemId)")
-//    public Item editItem(Long itemId, Item request) {
-//        Item item = itemRepo.findById(itemId)
-//            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        item.setName(request.getName());
-//        item.setCategory(request.getCategory());
-//        item.setAmount(request.getAmount());
-//        // Don't change author or shared groups here (separate endpoint for that)
-//
-//        return itemRepo.save(item);
-//    }
-
-//    /**
-//     * Delete an item (only author can delete)
-//     */
-//    @PreAuthorize("@itemAuth.canEdit(authentication, #itemId)")
-//    public void deleteItem(Long itemId) {
-//        itemRepo.deleteById(itemId);
-//    }
 
     @PreAuthorize("@itemAuth.canEdit(authentication, #itemId) and @groupAuth.isMemberOfGroups(authentication, #groupIds)")
     public Item shareItem(Long itemId, Set<Long> groupIds) {

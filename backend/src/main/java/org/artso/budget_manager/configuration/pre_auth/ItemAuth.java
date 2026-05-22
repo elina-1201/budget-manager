@@ -1,7 +1,7 @@
-package org.artso.budget_manager.configuration;
+package org.artso.budget_manager.configuration.pre_auth;
 
 import lombok.RequiredArgsConstructor;
-import org.artso.budget_manager.dto.ItemRequest;
+import org.artso.budget_manager.dto.request_and_response.ItemRequest;
 import org.artso.budget_manager.entity.Item;
 import org.artso.budget_manager.repository.GroupRepo;
 import org.artso.budget_manager.repository.ItemRepo;

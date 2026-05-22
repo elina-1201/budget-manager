@@ -20,10 +20,10 @@ public class SecurityConfig {
         return http
                 .httpBasic(Customizer.withDefaults()) // enable basic HTTP authentication
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                        .requestMatchers("/api/auth/token").authenticated()
-                        .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                                .requestMatchers("/auth/refresh").permitAll()
+                                .requestMatchers("/auth/token").authenticated()
+                                .anyRequest().authenticated()
 //                        for testing, remove when done
 //                        .anyRequest().permitAll()
                 )
@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .sessionManagement(sessions ->
                         sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no session
                 )
-//                .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults())) // enable JWT authentication
+                .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults())) // enable JWT authentication
                 .build();
     }
 

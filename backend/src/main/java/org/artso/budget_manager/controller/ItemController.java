@@ -3,7 +3,7 @@ package org.artso.budget_manager.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.dto.ItemDto;
-import org.artso.budget_manager.dto.ItemRequest;
+import org.artso.budget_manager.dto.request_and_response.ItemRequest;
 import org.artso.budget_manager.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<?> getItems(Authentication auth) {
         try {
-            return new ResponseEntity<>(service.getPrivateItems(auth), HttpStatus.OK);
+            return new ResponseEntity<>(service.getAllItems(auth), HttpStatus.OK);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }

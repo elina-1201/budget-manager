@@ -3,7 +3,6 @@ package org.artso.budget_manager.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.artso.budget_manager.entity.Category;
 import org.artso.budget_manager.entity.Item;
 
 import java.math.BigDecimal;

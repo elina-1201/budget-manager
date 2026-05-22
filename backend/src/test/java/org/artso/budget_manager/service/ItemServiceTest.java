@@ -1,7 +1,7 @@
 package org.artso.budget_manager.service;
 
 import org.artso.budget_manager.dto.ItemDto;
-import org.artso.budget_manager.dto.ItemRequest;
+import org.artso.budget_manager.dto.request_and_response.ItemRequest;
 import org.artso.budget_manager.entity.AppUser;
 import org.artso.budget_manager.entity.Category;
 import org.artso.budget_manager.entity.Item;
@@ -9,6 +9,7 @@ import org.artso.budget_manager.repository.AppUserRepo;
 import org.artso.budget_manager.repository.CategoryRepo;
 import org.artso.budget_manager.repository.GroupRepo;
 import org.artso.budget_manager.repository.ItemRepo;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +29,6 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class ItemServiceTest {
-
     @MockitoBean
     private ItemRepo repo;
 
@@ -43,6 +43,7 @@ class ItemServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
+    @DisplayName("Should return expected ItemDto when given valid request and authenticated user")
     void createItem_returnsExpectedDto() {
         Authentication auth = new UsernamePasswordAuthenticationToken("user@example.com", "password");
 

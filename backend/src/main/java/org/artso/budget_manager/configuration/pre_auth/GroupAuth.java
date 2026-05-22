@@ -1,4 +1,4 @@
-package org.artso.budget_manager.configuration;
+package org.artso.budget_manager.configuration.pre_auth;
 
 import lombok.RequiredArgsConstructor;
 import org.artso.budget_manager.repository.GroupRepo;

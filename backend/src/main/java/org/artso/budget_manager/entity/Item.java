@@ -26,9 +26,6 @@ public class Item {
     @Min(0)
     private BigDecimal amount;
     private String category;
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "author_id")

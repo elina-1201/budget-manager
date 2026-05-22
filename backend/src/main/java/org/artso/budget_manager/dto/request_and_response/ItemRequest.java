@@ -1,4 +1,4 @@
-package org.artso.budget_manager.dto;
+package org.artso.budget_manager.dto.request_and_response;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
