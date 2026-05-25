@@ -7,7 +7,6 @@ import org.artso.budget_manager.auth.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -18,7 +17,6 @@ public class CategoryService {
     private final CategoryRepo categoryRepo;
     private final AppUserService userService;
 
-    @Transactional
     public void addCategory(String categoryName, Authentication auth) {
         AppUser owner = userService.requireUserByEmail(auth.getName());
 

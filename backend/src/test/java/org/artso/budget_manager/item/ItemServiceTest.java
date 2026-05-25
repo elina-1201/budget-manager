@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,7 +51,7 @@ class ItemServiceTest {
 
         Category category = new Category();
         category.setName("Food");
-        when(categoryRepo.findById(7L)).thenReturn(java.util.Optional.of(category));
+        when(categoryRepo.findById(7L)).thenReturn(Optional.of(category));
 
         when(repo.save(any(Item.class))).thenAnswer(invocation -> {
             Item item = invocation.getArgument(0);

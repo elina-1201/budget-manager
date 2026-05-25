@@ -27,4 +27,5 @@ public class GroupController {
     public ResponseEntity<List<UserGroup>> getAllGroups(Authentication auth) {
         return new ResponseEntity<>(service.getAll(auth), HttpStatus.OK);
     }
+    //TODO: create dto for this
 }

@@ -24,5 +24,17 @@ public class InvitationController {
     public ResponseEntity<List<Invitation>> getInvitations(Authentication auth) {
         return new ResponseEntity<>(service.getInvitationsByRecipientEmail(auth), HttpStatus.OK);
     }
+
+    @PostMapping("/{id}/accept")
+    public ResponseEntity<Void> acceptInvitation(@PathVariable Long id, Authentication auth) {
+        service.acceptInvitation(id, auth);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/decline")
+    public ResponseEntity<Void> declineInvitation(@PathVariable Long id, Authentication auth) {
+        service.declineInvitation(id, auth);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
 
