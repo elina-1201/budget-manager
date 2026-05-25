@@ -6,7 +6,6 @@ import org.artso.budget_manager.auth.AppUserService;
 import org.artso.budget_manager.group.GroupRepo;
 import org.artso.budget_manager.group.UserGroup;
 import org.artso.budget_manager.invitation.dto.InvitationRequest;
-import org.artso.budget_manager.invitation.enums.InvintationStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,6 @@ public class InvitationService {
                 .senderEmail(senderEmail)
                 .group(group)
                 .invitationDate(java.time.LocalDate.now())
-                .status(InvintationStatus.PENDING)
                 .build();
 
         return repo.save(invitation);
@@ -76,7 +74,6 @@ public class InvitationService {
         groupUsers.add(user);
         updatedGroup.setUsers(groupUsers);
         groupRepo.save(updatedGroup);
-        invitation.setStatus(InvintationStatus.ACCEPTED);
         repo.delete(invitation);
     }
 
@@ -84,7 +81,6 @@ public class InvitationService {
         String email = auth.getName();
         Invitation invitation = getInvitation(invitationId);
         checkIfRecipient(invitation, email);
-        invitation.setStatus(InvintationStatus.DECLINED);
         repo.delete(invitation);
     }
 }

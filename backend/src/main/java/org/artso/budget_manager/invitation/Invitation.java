@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.artso.budget_manager.group.UserGroup;
-import org.artso.budget_manager.invitation.enums.InvintationStatus;
 import java.time.LocalDate;
 
 @Entity
@@ -28,14 +27,8 @@ public class Invitation {
     @NotBlank
     @Email
     private String senderEmail;
-//    @NotBlank
-//    @Column(name = "group_name")
-//    private String group;
-
     @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate invitationDate;
-    @Enumerated(EnumType.STRING)
-    private InvintationStatus status;
 
     @OneToOne
     @JoinColumn(name = "group_id")
