@@ -3,10 +3,11 @@ package org.artso.budget_manager.category;
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.category.dto.CategoryProjection;
 import org.artso.budget_manager.auth.AppUser;
-import org.artso.budget_manager.auth.AppUserRepo;
+import org.artso.budget_manager.auth.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -15,11 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryService {
     private final CategoryRepo categoryRepo;
-    private final AppUserRepo userRepo;
+    private final AppUserService userService;
 
+    @Transactional
     public void addCategory(String categoryName, Authentication auth) {
-        AppUser owner = userRepo.findByEmail(auth.getName().toLowerCase())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        AppUser owner = userService.requireUserByEmail(auth.getName());
 
         if(categoryRepo.existsByName(categoryName)) { throw new ResponseStatusException(HttpStatus.CONFLICT); }
 
@@ -31,8 +32,7 @@ public class CategoryService {
     }
 
     public List<CategoryProjection> getCategories(Authentication auth) {
-        AppUser owner = userRepo.findByEmail(auth.getName().toLowerCase())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        AppUser owner = userService.requireUserByEmail(auth.getName());
 
         return categoryRepo.findAllByOwner(owner);
     }

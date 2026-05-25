@@ -1,36 +1,42 @@
 package org.artso.budget_manager.group;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.auth.AppUser;
-import org.artso.budget_manager.auth.AppUserRepo;
+import org.artso.budget_manager.auth.AppUserService;
+import org.artso.budget_manager.group.dto.GroupRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class GroupService {
     final GroupRepo groupRepo;
-    final AppUserRepo userRepo;
+    final AppUserService userService;
 
-    public void createGroup(UserGroup request, Authentication auth) {
-        if (groupRepo.existsByName(request.getName())) {
+    @Transactional
+    public void createGroup(GroupRequest request, Authentication auth) {
+        if (groupRepo.existsByName(request.name())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
-        } else {
-            AppUser author = userRepo.findByEmail(auth.getName())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email: " + auth.getName() + " not found"));
-
-            Set<AppUser> users = new HashSet<>();
-            users.add(author);
-
-            UserGroup group = new UserGroup();
-            group.setName(request.getName());
-            group.setUsers(users);
-            groupRepo.save(group);
         }
+        AppUser author = userService.requireUserByEmail(auth.getName());
+
+        Set<AppUser> users = new HashSet<>();
+        users.add(author);
+
+        UserGroup group = new UserGroup();
+        group.setName(request.name());
+        group.setUsers(users);
+        groupRepo.save(group);
+    }
+
+    public List<UserGroup> getAll(Authentication auth) {
+        return groupRepo.findAllByUsersEmailIgnoreCase(auth.getName());
     }
 }

@@ -83,7 +83,7 @@ class AuthControllerTest {
         // Initialize ObjectMapper locally
         objectMapper = new ObjectMapper();
         
-        // Initialize test user data with unique email to avoid conflicts between tests
+        // Initialize test user data with unique recipientEmail to avoid conflicts between tests
         userEmail = "testauth" + System.currentTimeMillis() + "@example.com";
         userPassword = "TestPassword123!";
         
@@ -113,7 +113,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should reject registration with duplicate email")
+    @DisplayName("Should reject registration with duplicate recipientEmail")
     void testRegisterUser_DuplicateEmail() throws Exception {
         // Arrange: Try to register the same user again
         AppUser duplicateUser = new AppUser();
@@ -121,7 +121,7 @@ class AuthControllerTest {
         duplicateUser.setName("Test User");
         duplicateUser.setPassword(userPassword);
 
-        // Act & Assert: Expect 409 Conflict response (email already registered)
+        // Act & Assert: Expect 409 Conflict response (recipientEmail already registered)
         mockMvc.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(duplicateUser)))
@@ -160,11 +160,11 @@ class AuthControllerTest {
 
     /**
      * This test verifies that the tokens contain the correct claims
-     * (subject = email, token_type, scope/authorities)
+     * (subject = recipientEmail, token_type, scope/authorities)
      *
      * Expected behavior:
-     * - Access token contains subject (email), token_type=access, and scope
-     * - Refresh token contains subject (email), token_type=refresh, and scope
+     * - Access token contains subject (recipientEmail), token_type=access, and scope
+     * - Refresh token contains subject (recipientEmail), token_type=refresh, and scope
      */
     @Test
     @DisplayName("Should include correct claims in tokens")

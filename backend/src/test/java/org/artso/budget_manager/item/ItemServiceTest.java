@@ -3,8 +3,8 @@ package org.artso.budget_manager.item;
 import org.artso.budget_manager.item.dto.ItemDto;
 import org.artso.budget_manager.item.dto.ItemRequest;
 import org.artso.budget_manager.auth.AppUser;
+import org.artso.budget_manager.auth.AppUserService;
 import org.artso.budget_manager.category.Category;
-import org.artso.budget_manager.auth.AppUserRepo;
 import org.artso.budget_manager.category.CategoryRepo;
 import org.artso.budget_manager.group.GroupRepo;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +30,7 @@ class ItemServiceTest {
     private ItemRepo repo;
 
     @MockitoBean
-    private AppUserRepo userRepo;
+    private AppUserService userService;
 
     @MockitoBean
     private CategoryRepo categoryRepo;
@@ -47,11 +46,11 @@ class ItemServiceTest {
 
         AppUser author = new AppUser();
         author.setEmail("user@example.com");
-        when(userRepo.findByEmail("user@example.com")).thenReturn(Optional.of(author));
+        when(userService.requireUserByEmail("user@example.com")).thenReturn(author);
 
         Category category = new Category();
         category.setName("Food");
-        when(categoryRepo.findById(7L)).thenReturn(Optional.of(category));
+        when(categoryRepo.findById(7L)).thenReturn(java.util.Optional.of(category));
 
         when(repo.save(any(Item.class))).thenAnswer(invocation -> {
             Item item = invocation.getArgument(0);

@@ -7,9 +7,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Locale;
 
 @AllArgsConstructor
 @Service
@@ -17,8 +21,18 @@ public class AppUserService implements UserDetailsService {
     final AppUserRepo repository;
     final PasswordEncoder passwordEncoder;
 
+    public boolean userExistsByEmail(String email) {
+        return repository.existsByEmail(normalizeEmail(email));
+    }
+
+    public AppUser requireUserByEmail(String email) {
+        return repository.findByEmail(normalizeEmail(email))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    @Transactional
     public void addUser(AppUser request){
-        if(repository.existsByEmail(request.getEmail().toLowerCase())) {
+        if(userExistsByEmail(request.getEmail())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
@@ -28,9 +42,13 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser user = repository.findByEmail(username.toLowerCase())
-                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + username + " not found"));
+    @SuppressWarnings("deprecation")
+    public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
+        AppUser user = requireUserByEmail(username);
         return new AppUserAdapter(user);
+    }
+
+    private String normalizeEmail(String email) {
+        return email.toLowerCase(Locale.ROOT);
     }
 }
