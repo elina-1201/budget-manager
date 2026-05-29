@@ -14,8 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Locale;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class AppUserService implements UserDetailsService {
     final AppUserRepo repository;
     final PasswordEncoder passwordEncoder;
