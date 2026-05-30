@@ -1,5 +1,5 @@
 import 'package:budget_manager/pages/main/main_screen.dart';
-import 'package:budget_manager/pages/register/RegisterScreen.dart';
+import 'package:budget_manager/pages/register/register_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,11 +12,12 @@ class AppRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: const MainScreen(),
       routes: {
         '/': (context) => const MainScreen(),
         '/register': (context) => const RegisterScreen(),
       },
+      // for testing
+      initialRoute: '/register',
     );
   }
 }
