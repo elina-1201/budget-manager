@@ -3,6 +3,7 @@ package org.artso.budget_manager.auth;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.auth.dto.RefreshTokenRequest;
+import org.artso.budget_manager.auth.dto.RegisterRequest;
 import org.artso.budget_manager.auth.dto.TokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,9 @@ public class AuthController {
 //    static final int REFRESH_EXP = 50;
 
     @PostMapping("/register")
-    ResponseEntity<AppUser> registerUser(@Valid @RequestBody AppUser appUser) {
-        service.addUser(appUser);
-        return new ResponseEntity<>(appUser, HttpStatus.CREATED);
+    ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequest request) {
+        service.addUser(request);
+        return new ResponseEntity<>("created", HttpStatus.CREATED);
     }
 
     String getJwtToken(String subject, String type, List<String> authorities) {

@@ -1,8 +1,8 @@
 package org.artso.budget_manager.invitation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.artso.budget_manager.auth.AppUser;
 import org.artso.budget_manager.auth.AppUserService;
+import org.artso.budget_manager.auth.dto.RegisterRequest;
 import org.artso.budget_manager.group.GroupRepo;
 import org.artso.budget_manager.group.UserGroup;
 import org.artso.budget_manager.invitation.dto.InvitationRequest;
@@ -65,17 +65,8 @@ public class InvitationControllerTest {
         recipientEmail = "recipient" + ts + "@example.com";
         recipientPassword = "RecipientPass123!";
 
-        AppUser sender = new AppUser();
-        sender.setEmail(senderEmail);
-        sender.setName("Sender");
-        sender.setPassword(senderPassword);
-        appUserService.addUser(sender);
-
-        AppUser recipient = new AppUser();
-        recipient.setEmail(recipientEmail);
-        recipient.setName("Recipient");
-        recipient.setPassword(recipientPassword);
-        appUserService.addUser(recipient);
+        appUserService.addUser(new RegisterRequest("Sender", senderEmail, senderPassword));
+        appUserService.addUser(new RegisterRequest("Recipient", recipientEmail, recipientPassword));
 
         // Clean up any leftover invitations
         invitationRepo.deleteAll();
@@ -169,4 +160,3 @@ public class InvitationControllerTest {
         assertThat(invitationRepo.findById(invitationToDecline)).isEmpty();
     }
 }
-

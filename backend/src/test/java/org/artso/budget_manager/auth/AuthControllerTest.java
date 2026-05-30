@@ -2,6 +2,7 @@ package org.artso.budget_manager.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.artso.budget_manager.auth.dto.RefreshTokenRequest;
+import org.artso.budget_manager.auth.dto.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -88,22 +89,17 @@ class AuthControllerTest {
         userPassword = "TestPassword123!";
         
         // Create and save a real test user to the database
-        AppUser testUser = new AppUser();
-        testUser.setEmail(userEmail);
-        testUser.setName("Test User");
-        testUser.setPassword(userPassword);
-        
-        // Register the user with the real service (will hash password)
+        RegisterRequest testUser = new RegisterRequest("Test User", userEmail, userPassword);
         appUserService.addUser(testUser);
     }
 
     @Test
     @DisplayName("Should register a new user successfully")
     void testRegisterUser_Success() throws Exception {
-        AppUser newUser = new AppUser();
-        newUser.setEmail("newuser" + System.currentTimeMillis() + "@example.com");
-        newUser.setName("New Test User");
-        newUser.setPassword("Password123!");
+        RegisterRequest newUser = new RegisterRequest(
+                "New Test User",
+                "newuser" + System.currentTimeMillis() + "@example.com",
+                "Password123!");
 
         // Act & Assert: Send POST request to register endpoint
         mockMvc.perform(post("/auth/register")
@@ -116,10 +112,7 @@ class AuthControllerTest {
     @DisplayName("Should reject registration with duplicate recipientEmail")
     void testRegisterUser_DuplicateEmail() throws Exception {
         // Arrange: Try to register the same user again
-        AppUser duplicateUser = new AppUser();
-        duplicateUser.setEmail(userEmail);
-        duplicateUser.setName("Test User");
-        duplicateUser.setPassword(userPassword);
+        RegisterRequest duplicateUser = new RegisterRequest("Test User", userEmail, userPassword);
 
         // Act & Assert: Expect 409 Conflict response (recipientEmail already registered)
         mockMvc.perform(post("/auth/register")
@@ -315,4 +308,3 @@ class AuthControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 }
-

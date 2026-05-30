@@ -1,6 +1,7 @@
 package org.artso.budget_manager.auth;
 
 import lombok.AllArgsConstructor;
+import org.artso.budget_manager.auth.dto.RegisterRequest;
 import org.artso.budget_manager.security.userdetails.AppUserAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,14 +30,19 @@ public class AppUserService implements UserDetailsService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    public void addUser(AppUser request){
-        if(userExistsByEmail(request.getEmail())) {
+    public void addUser(RegisterRequest request){
+        if(userExistsByEmail(request.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        request.setPassword(encodedPassword);
-        repository.save(request);
+        String encodedPassword = passwordEncoder.encode(request.password());
+
+        AppUser user = new AppUser();
+        user.setName(request.name());
+        user.setEmail(request.email());
+        user.setPassword(encodedPassword);
+
+        repository.save(user);
     }
 
     @Override
