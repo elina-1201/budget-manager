@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'register_form.dart';
+import 'widgets/register_form.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});

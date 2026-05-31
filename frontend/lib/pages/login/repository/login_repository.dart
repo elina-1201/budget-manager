@@ -1,6 +1,6 @@
-import 'package:budget_manager/pages/register/dto/user_request_body.dart';
+import 'package:budget_manager/pages/login/dto/user_request_body.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart' show Dio, Headers, Options;
 
 String apiBaseUrl() {
   //TODO: make web compatible
@@ -14,11 +14,12 @@ String apiBaseUrl() {
   return 'http://localhost:8080';
 }
 
-class RegisterRepository {
+//NOTE: /login doesn't exist on the backend yet!
+class LoginRepository {
   final Dio _dio = Dio();
-  Future<dynamic> register(UserRequestBody body) async {
+  Future<dynamic> login(UserRequestBody body) async {
     final response = await _dio.post(
-      '${apiBaseUrl()}/auth/register',
+      '${apiBaseUrl()}/auth/login',
       data: body.toMap(),
       options: Options(contentType: Headers.jsonContentType),
     );

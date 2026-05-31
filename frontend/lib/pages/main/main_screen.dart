@@ -8,11 +8,22 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Budget Manager')),
       body: Center(
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed('/register');
-          },
-          child: const Text('Go to Register Screen'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/register');
+              },
+              child: const Text('Go to Register Screen'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/login');
+              },
+              child: const Text('Go to Login Screen'),
+            ),
+          ],
         ),
       ),
     );
