@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:budget_manager/auth_storage.dart';
 import 'package:budget_manager/pages/login/dto/user_request_body.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -18,11 +21,19 @@ String apiBaseUrl() {
 class LoginRepository {
   final Dio _dio = Dio();
   Future<dynamic> login(UserRequestBody body) async {
-    final response = await _dio.post(
-      '${apiBaseUrl()}/auth/login',
-      data: body.toMap(),
-      options: Options(contentType: Headers.jsonContentType),
+    final credentials = base64Encode(
+      utf8.encode('${body.email}:${body.password}'),
     );
+    final response = await _dio.post(
+      '${apiBaseUrl()}/auth/token',
+      // data: body.toMap(),
+      options: Options(headers: {'Authorization': 'Basic $credentials'}),
+    );
+    // Login — save both tokens
+    final token = response.data['access_token'];
+    final refresh = response.data['refresh_token'];
+    await AuthStorage.saveTokens(accessToken: token, refreshToken: refresh);
+    debugPrint(response.data.toString());
     return response.data;
   }
 }
