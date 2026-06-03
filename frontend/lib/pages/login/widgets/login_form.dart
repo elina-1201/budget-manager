@@ -45,10 +45,26 @@ class _LoginFormState extends State<LoginForm> {
             AuthButton(
               buttonText: 'Login',
               onPressed: () async {
-                await LoginRepository().login(
-                  UserRequestBody(email: _email.text, password: _password.text),
-                );
+                try {
+                  await LoginRepository().login(
+                    UserRequestBody(
+                      email: _email.text,
+                      password: _password.text,
+                    ),
+                  );
+                  if (!mounted) return;
+                  Navigator.of(context).pushReplacementNamed('/items-list');
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text('Login failed')));
+                }
               },
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pushNamed('/register'),
+              child: const Text('Don\'t have an account? Register here'),
             ),
           ],
         ),
