@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:budget_manager/di/auth_storage.dart';
 import 'package:budget_manager/pages/login/dto/user_request_body.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginRepository {
@@ -22,6 +23,6 @@ class LoginRepository {
       accessToken: token,
       refreshToken: refresh,
     );
-    // debugPrint(response.data.toString());
+    debugPrint(response.data.toString());
   }
 }

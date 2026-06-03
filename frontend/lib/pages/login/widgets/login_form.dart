@@ -53,12 +53,12 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   );
                   if (!mounted) return;
-                  Navigator.of(context).pushReplacementNamed('/items-list');
+                  Navigator.of(context).pushReplacementNamed('/items');
                 } catch (e) {
                   if (!mounted) return;
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(const SnackBar(content: Text('Login failed')));
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
                 }
               },
             ),

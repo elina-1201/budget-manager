@@ -29,9 +29,6 @@ class _AuthButtonState extends State<AuthButton> {
               try {
                 await widget.onPressed();
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${widget.buttonText} successful.')),
-                );
               } catch (error) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
