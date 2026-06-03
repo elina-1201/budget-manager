@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../components/auth/auth.dart';
-import '../dto/user_request_body.dart';
+import 'package:budget_manager/shared_widgets/auth/auth.dart';
+import '../dto/register_request_body.dart';
 import '../repository/register_repository.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -52,7 +52,7 @@ class _RegisterFormState extends State<RegisterForm> {
               buttonText: 'Register',
               onPressed: () async {
                 await RegisterRepository().register(
-                  UserRequestBody(
+                  RegisterRequestBody(
                     name: _name.text,
                     email: _email.text,
                     password: _password.text,

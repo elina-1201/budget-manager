@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:budget_manager/di/auth_storage.dart';
+import 'package:budget_manager/core/services/auth_storage.dart';
 import '../dto/item.dart';
 
 class ItemRepository {

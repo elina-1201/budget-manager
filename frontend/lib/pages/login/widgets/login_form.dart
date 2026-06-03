@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/auth/auth.dart';
+import '../../../shared_widgets/auth/auth.dart';
 import '../repository/login_repository.dart';
-import '../dto/user_request_body.dart';
+import '../dto/login_request_body.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -47,7 +47,7 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: () async {
                 try {
                   await LoginRepository().login(
-                    UserRequestBody(
+                    LoginRequestBody(
                       email: _email.text,
                       password: _password.text,
                     ),

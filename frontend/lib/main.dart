@@ -1,9 +1,9 @@
-import 'package:budget_manager/di/di_setup.dart';
+import 'package:budget_manager/core/di/di_setup.dart';
 import 'package:budget_manager/route/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  diInitialization();
+  setupDependencies();
 
   runApp(const AppRoot());
 }

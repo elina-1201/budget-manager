@@ -1,14 +1,14 @@
 import 'dart:convert';
-
-import 'package:budget_manager/di/auth_storage.dart';
-import 'package:budget_manager/pages/login/dto/user_request_body.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'package:budget_manager/core/services/auth_storage.dart';
+import '../dto/login_request_body.dart';
+
 class LoginRepository {
   final Dio _dio = Dio();
-  Future<void> login(UserRequestBody body) async {
+  Future<void> login(LoginRequestBody body) async {
     final credentials = base64Encode(
       utf8.encode('${body.email}:${body.password}'),
     );

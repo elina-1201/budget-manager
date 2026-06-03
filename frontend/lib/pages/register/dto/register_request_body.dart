@@ -1,9 +1,9 @@
-class UserRequestBody {
+class RegisterRequestBody {
   final String name;
   final String email;
   final String password;
 
-  UserRequestBody({
+  RegisterRequestBody({
     required this.name,
     required this.email,
     required this.password,
