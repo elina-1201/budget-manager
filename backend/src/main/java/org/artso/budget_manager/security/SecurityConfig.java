@@ -21,7 +21,10 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults()) // enable basic HTTP authentication
                 .authorizeHttpRequests(auth -> auth
                         //FIXME: for testing only, remove later!
-                        .requestMatchers("/springdoc.api-docs.path").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-resources/**", "/webjars/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers("/auth/refresh").permitAll()
                         .requestMatchers("/auth/token").authenticated()
