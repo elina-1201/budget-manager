@@ -6,12 +6,11 @@ import lombok.Setter;
 import org.artso.budget_manager.item.Item;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
-@Setter
+    @Getter
+    @Setter
 public class ItemDto {
     private Long id;
     private String name;
@@ -29,9 +28,7 @@ public class ItemDto {
         );
     }
 
-    public static List<ItemDto> toDTOList(List<Item> items) {
-        List<ItemDto> dtos = new ArrayList<>();
-        items.forEach(item -> dtos.add(toDto(item)));
-        return dtos;
+    public static List<ItemDto> toDtoList(List<Item> items) {
+        return items.stream().map(ItemDto::toDto).toList();
     }
 }

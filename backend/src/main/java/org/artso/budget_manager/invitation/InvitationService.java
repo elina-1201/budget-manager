@@ -5,6 +5,7 @@ import org.artso.budget_manager.auth.AppUser;
 import org.artso.budget_manager.auth.AppUserService;
 import org.artso.budget_manager.group.GroupRepo;
 import org.artso.budget_manager.group.UserGroup;
+import org.artso.budget_manager.invitation.dto.InvitationDto;
 import org.artso.budget_manager.invitation.dto.InvitationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -34,7 +35,7 @@ public class InvitationService {
     }
 
     @Transactional
-    public Invitation save(InvitationRequest invitationRequest, Authentication auth) {
+    public void save(InvitationRequest invitationRequest, Authentication auth) {
         Long groupId = invitationRequest.groupId();
         UserGroup group = groupRepo.findById(groupId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Group does not exist"));
@@ -56,12 +57,13 @@ public class InvitationService {
                 .invitationDate(java.time.LocalDate.now())
                 .build();
 
-        return repo.save(invitation);
+        repo.save(invitation);
     }
 
-    public List<Invitation> getInvitationsByRecipientEmail(Authentication auth) {
+    public List<InvitationDto> getInvitationsByRecipientEmail(Authentication auth) {
         String email = auth.getName();
-        return repo.findAllByRecipientEmailIgnoreCase(email);
+        List<Invitation> invitations = repo.findAllByRecipientEmailIgnoreCase(email);
+        return InvitationDto.toDtoList(invitations);
     }
 
     @Transactional

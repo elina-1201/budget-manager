@@ -60,7 +60,7 @@ public class ItemService {
         AppUser user = userService.requireUserByEmail(auth.getName());
 
         List<Item> items = itemRepo.findAllByAuthor(user);
-        return ItemDto.toDTOList(items);
+        return ItemDto.toDtoList(items);
     }
 
     @PreAuthorize("@itemAuth.canEdit(authentication, #itemId) and @groupAuth.isMemberOfGroups(authentication, #groupIds)")

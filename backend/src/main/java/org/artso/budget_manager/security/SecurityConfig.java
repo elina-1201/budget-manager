@@ -20,12 +20,13 @@ public class SecurityConfig {
         return http
                 .httpBasic(Customizer.withDefaults()) // enable basic HTTP authentication
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                                .requestMatchers("/auth/refresh").permitAll()
-                                .requestMatchers("/auth/token").authenticated()
-                                .anyRequest().authenticated()
-//                        for testing, remove when done
-//                        .anyRequest().permitAll()
+                        //FIXME: for testing only, remove later!
+                        .requestMatchers("/springdoc.api-docs.path").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers("/auth/refresh").permitAll()
+                        .requestMatchers("/auth/token").authenticated()
+                        .anyRequest().authenticated()
+
                 )
                 .csrf(AbstractHttpConfigurer::disable) // allow modifying requests from tests
                 .sessionManagement(sessions ->

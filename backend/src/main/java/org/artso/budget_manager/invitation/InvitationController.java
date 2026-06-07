@@ -1,6 +1,7 @@
 package org.artso.budget_manager.invitation;
 
 import lombok.AllArgsConstructor;
+import org.artso.budget_manager.invitation.dto.InvitationDto;
 import org.artso.budget_manager.invitation.dto.InvitationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,13 @@ public class InvitationController {
     private InvitationService service;
 
     @PostMapping
-    public ResponseEntity<Invitation> createInvite(@RequestBody InvitationRequest request, Authentication auth) {
-        return new ResponseEntity<>(service.save(request, auth), HttpStatus.CREATED);
+    public ResponseEntity<Void> createInvite(@RequestBody InvitationRequest request, Authentication auth) {
+        service.save(request, auth);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Invitation>> getInvitations(Authentication auth) {
+    public ResponseEntity<List<InvitationDto>> getInvitations(Authentication auth) {
         return new ResponseEntity<>(service.getInvitationsByRecipientEmail(auth), HttpStatus.OK);
     }
 
