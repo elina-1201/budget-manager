@@ -1,9 +1,11 @@
 import 'package:budget_manager/pages/register/dto/register_request_body.dart';
-import 'package:dio/dio.dart' show Dio, Headers, Options;
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
 class RegisterRepository {
-  final Dio _dio = Dio();
+  final Dio _dio = GetIt.I.get<Dio>();
+
+  //FIXME: take token after register and use it for rerouting to items
   Future<dynamic> register(RegisterRequestBody body) async {
     final baseUrl = GetIt.I.get<String>();
     final response = await _dio.post(

@@ -7,7 +7,7 @@ import 'package:budget_manager/core/services/auth_storage.dart';
 import '../dto/login_request_body.dart';
 
 class LoginRepository {
-  final Dio _dio = Dio();
+  final Dio _dio = GetIt.I.get<Dio>();
   Future<void> login(LoginRequestBody body) async {
     final credentials = base64Encode(
       utf8.encode('${body.email}:${body.password}'),

@@ -1,63 +1,50 @@
-import 'package:budget_manager/pages/items_list/dto/item.dart';
-import 'package:budget_manager/pages/items_list/repository/item_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:budget_manager/pages/items_list/dto/item.dart';
+import 'package:budget_manager/pages/items_list/provider/item_provider.dart';
 
-//TODO: remove the back button from the app bar
-class ItemsListScreen extends StatefulWidget {
+class ItemsListScreen extends ConsumerWidget {
   const ItemsListScreen({super.key});
 
   @override
-  State<ItemsListScreen> createState() => _ItemsListScreenState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final itemsAsync = ref.watch(itemsListProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Items')),
+      body: itemsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Error: $error')),
+        data: (items) => items.isEmpty
+            ? const Center(child: Text('No items yet, try adding some!'))
+            : ItemsList(items: items),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/add_item');
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 }
 
-class _ItemsListScreenState extends State<ItemsListScreen> {
-  List<Item> _items = [];
-  bool _loading = true;
-  String? _error;
-
-  @override
-  void initState() {
-    super.initState();
-    GetIt.I
-        .get<ItemRepository>()
-        .fetchItems()
-        .then((data) {
-          setState(() {
-            _items = data;
-            _loading = false;
-          });
-        })
-        .catchError((e) {
-          setState(() {
-            _error = e.toString();
-            _loading = false;
-          });
-        });
-  }
+class ItemsList extends StatelessWidget {
+  const ItemsList({super.key, required this.items});
+  final List<Item> items;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Items')),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? Center(child: Text('Error: $_error'))
-          : _items.isEmpty
-          ? const Center(child: Text('No items found'))
-          : ListView.builder(
-              itemCount: _items.length,
-              itemBuilder: (context, index) {
-                final item = _items[index];
-                final title = item.name;
-                return ListTile(
-                  title: Text(title),
-                  subtitle: Text(item.description),
-                  trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
-                );
-              },
-            ),
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return ListTile(
+          title: Text(item.name),
+          subtitle: Text(item.description),
+          trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
+        );
+      },
     );
   }
 }

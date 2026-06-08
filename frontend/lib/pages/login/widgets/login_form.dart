@@ -1,38 +1,38 @@
+import 'package:budget_manager/pages/login/provider/login_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared_widgets/auth/auth.dart';
-import '../repository/login_repository.dart';
-import '../dto/login_request_body.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
   @override
   void initState() {
+    super.initState();
     _email = TextEditingController();
     _password = TextEditingController();
-
-    super.initState();
   }
 
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _navigateToItemsOnSuccess(context);
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(30.0),
@@ -42,25 +42,12 @@ class _LoginFormState extends State<LoginForm> {
             EmailField(controller: _email),
             PasswordField(controller: _password),
             const SizedBox(height: 12),
+
             AuthButton(
               buttonText: 'Login',
-              onPressed: () async {
-                try {
-                  await LoginRepository().login(
-                    LoginRequestBody(
-                      email: _email.text,
-                      password: _password.text,
-                    ),
-                  );
-                  if (!mounted) return;
-                  Navigator.of(context).pushReplacementNamed('/items');
-                } catch (e) {
-                  if (!mounted) return;
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(e.toString())));
-                }
-              },
+              onPressed: () => ref
+                  .read(loginControllerProvider.notifier)
+                  .login(email: _email.text, password: _password.text),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pushNamed('/register'),
@@ -70,5 +57,16 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     );
+  }
+
+  void _navigateToItemsOnSuccess(BuildContext context) {
+    ref.listen<AsyncValue<void>>(loginControllerProvider, (_, state) {
+      state.whenOrNull(
+        data: (_) => Navigator.of(context).pushReplacementNamed('/items'),
+        error: (error, _) => ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error.toString()))),
+      );
+    });
   }
 }
