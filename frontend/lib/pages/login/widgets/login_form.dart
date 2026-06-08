@@ -1,4 +1,4 @@
-import 'package:budget_manager/pages/login/provider/login_controller.dart';
+import 'package:budget_manager/pages/login/provider/login_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,7 +46,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             AuthButton(
               buttonText: 'Login',
               onPressed: () => ref
-                  .read(loginControllerProvider.notifier)
+                  .read(loginProvider.notifier)
                   .login(email: _email.text, password: _password.text),
             ),
             TextButton(
@@ -60,7 +60,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   void _navigateToItemsOnSuccess(BuildContext context) {
-    ref.listen<AsyncValue<void>>(loginControllerProvider, (_, state) {
+    ref.listen<AsyncValue<void>>(loginProvider, (_, state) {
       state.whenOrNull(
         data: (_) => Navigator.of(context).pushReplacementNamed('/items'),
         error: (error, _) => ScaffoldMessenger.of(
