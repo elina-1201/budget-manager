@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'register_controller.dart';
+part of 'register_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,34 +9,33 @@ part of 'register_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(RegisterController)
-final registerControllerProvider = RegisterControllerProvider._();
+@ProviderFor(RegisterNotifier)
+final registerProvider = RegisterNotifierProvider._();
 
-final class RegisterControllerProvider
-    extends $AsyncNotifierProvider<RegisterController, void> {
-  RegisterControllerProvider._()
+final class RegisterNotifierProvider
+    extends $AsyncNotifierProvider<RegisterNotifier, void> {
+  RegisterNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'registerControllerProvider',
+        name: r'registerProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$registerControllerHash();
+  String debugGetCreateSourceHash() => _$registerNotifierHash();
 
   @$internal
   @override
-  RegisterController create() => RegisterController();
+  RegisterNotifier create() => RegisterNotifier();
 }
 
-String _$registerControllerHash() =>
-    r'30fe9c3f6d3d4b099e43977d96918278eb00b46b';
+String _$registerNotifierHash() => r'61334a93568debdd2e22af8b0f91e83ef0349b66';
 
-abstract class _$RegisterController extends $AsyncNotifier<void> {
+abstract class _$RegisterNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

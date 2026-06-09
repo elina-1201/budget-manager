@@ -1,10 +1,11 @@
 import 'package:budget_manager/pages/register/dto/register_request_body.dart';
 import 'package:budget_manager/pages/register/provider/register_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'register_controller.g.dart';
+
+part 'register_notifier.g.dart';
 
 @riverpod
-class RegisterController extends _$RegisterController {
+class RegisterNotifier extends _$RegisterNotifier {
   @override
   FutureOr<void> build() => null;
 

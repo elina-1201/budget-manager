@@ -1,9 +1,7 @@
-import 'package:budget_manager/pages/register/provider/register_controller.dart';
-import 'package:budget_manager/pages/register/provider/register_provider.dart';
+import 'package:budget_manager/pages/register/provider/register_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:budget_manager/shared_widgets/auth/auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../dto/register_request_body.dart';
 
 class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
@@ -53,7 +51,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             AuthButton(
               buttonText: 'Register',
               onPressed: () => ref
-                  .read(registerControllerProvider.notifier)
+                  .read(registerProvider.notifier)
                   .register(
                     name: _name.text,
                     email: _email.text,
@@ -67,7 +65,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   }
 
   void _navigateToItemsOnSuccess(BuildContext context) {
-    ref.listen<AsyncValue<void>>(registerControllerProvider, (_, state) {
+    ref.listen<AsyncValue<void>>(registerProvider, (_, state) {
       state.whenOrNull(
         data: (_) => Navigator.of(context).pushReplacementNamed('/items'),
         error: (error, _) => ScaffoldMessenger.of(
