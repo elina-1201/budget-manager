@@ -1,21 +1,19 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 
 import '../dto/login_request_body.dart';
 import '../dto/login_response_body.dart';
 
 class LoginRepository {
   final Dio _dio;
-
-  LoginRepository({required this._dio});
+  final String baseUrl;
+  LoginRepository({required this._dio, required this.baseUrl});
 
   Future<AuthenticationResponse> login(LoginRequestBody body) async {
     final credentials = base64Encode(
       utf8.encode('${body.email}:${body.password}'),
     );
-    final baseUrl = GetIt.I.get<String>();
     final response = await _dio.post(
       '$baseUrl/auth/token',
       options: Options(headers: {'Authorization': 'Basic $credentials'}),

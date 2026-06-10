@@ -1,4 +1,3 @@
-import 'package:budget_manager/core/di/di_setup.dart';
 import 'package:budget_manager/core/services/auth/auth_storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/pages/items_list/items_list_screen.dart';
 import 'package:budget_manager/pages/login/login_screen.dart';
@@ -7,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  setupDependencies();
-
   runApp(ProviderScope(child: const AppRoot()));
 }
 

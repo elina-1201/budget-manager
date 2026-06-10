@@ -3,18 +3,17 @@ import 'dart:convert';
 import 'package:budget_manager/pages/login/dto/login_response_body.dart';
 import 'package:budget_manager/pages/register/dto/register_request_body.dart';
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 
 class RegisterRepository {
   final Dio _dio;
-  const RegisterRepository({required this._dio});
+  final String baseUrl;
+  const RegisterRepository({required this._dio, required this.baseUrl});
 
   Future<AuthenticationResponse> register(RegisterRequestBody body) async {
     final credentials = base64Encode(
       utf8.encode('${body.email}:${body.password}'),
     );
 
-    final baseUrl = GetIt.I.get<String>();
     await _dio.post('$baseUrl/auth/register', data: body.toMap());
 
     final response = await Dio().post(
