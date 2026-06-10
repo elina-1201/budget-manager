@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'register_notifier.dart';
+part of 'auth_state_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,43 +9,42 @@ part of 'register_notifier.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(RegisterNotifier)
-final registerProvider = RegisterNotifierProvider._();
+@ProviderFor(AuthState)
+final authStateProvider = AuthStateProvider._();
 
-final class RegisterNotifierProvider
-    extends $AsyncNotifierProvider<RegisterNotifier, void> {
-  RegisterNotifierProvider._()
+final class AuthStateProvider extends $AsyncNotifierProvider<AuthState, bool> {
+  AuthStateProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'registerProvider',
-        isAutoDispose: true,
+        name: r'authStateProvider',
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$registerNotifierHash();
+  String debugGetCreateSourceHash() => _$authStateHash();
 
   @$internal
   @override
-  RegisterNotifier create() => RegisterNotifier();
+  AuthState create() => AuthState();
 }
 
-String _$registerNotifierHash() => r'94e1aa7780334188a85c4df3345600185d5083d4';
+String _$authStateHash() => r'36f0134ae57303a0e70a2c026dd4c9faa4a6e14b';
 
-abstract class _$RegisterNotifier extends $AsyncNotifier<void> {
-  FutureOr<void> build();
+abstract class _$AuthState extends $AsyncNotifier<bool> {
+  FutureOr<bool> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<void>, void>,
-              AsyncValue<void>,
+              AnyNotifier<AsyncValue<bool>, bool>,
+              AsyncValue<bool>,
               Object?,
               Object?
             >;

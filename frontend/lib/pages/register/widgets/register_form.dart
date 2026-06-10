@@ -1,6 +1,6 @@
 import 'package:budget_manager/pages/register/provider/register_notifier.dart';
-import 'package:flutter/material.dart';
 import 'package:budget_manager/shared_widgets/auth/auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RegisterForm extends ConsumerStatefulWidget {

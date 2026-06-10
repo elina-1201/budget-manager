@@ -48,4 +48,4 @@ final class ItemRepositoryProvider
   }
 }
 
-String _$itemRepositoryHash() => r'faf4f43e31425508922da80d8508364760840755';
+String _$itemRepositoryHash() => r'2fa3f7871644990796fc8f39c179f8da037bcd35';

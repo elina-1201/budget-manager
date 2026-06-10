@@ -1,18 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:budget_manager/core/services/auth_storage.dart';
+
 import '../dto/item.dart';
 
 class ItemRepository {
-  final Dio _dio = GetIt.I.get<Dio>();
-  Future<List<Item>> fetchItems() async {
-    final token = await GetIt.I.get<AuthStorage>().getAccessToken();
+  ItemRepository({required this._dio});
+  final Dio _dio;
 
+  Future<List<Item>> fetchItems() async {
     final baseUrl = GetIt.I.get<String>();
-    final response = await _dio.get(
-      '$baseUrl/item',
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
-    );
+    final response = await _dio.get('$baseUrl/item');
 
     return (response.data as List).map((e) => Item.fromMap(e)).toList();
   }

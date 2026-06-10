@@ -55,4 +55,4 @@ final class RegisterRepositoryProvider
 }
 
 String _$registerRepositoryHash() =>
-    r'dd5b2fe5b832e4c3a4d207cf5db7033a636a7f98';
+    r'f56330b777fffda40ab68f0a79675c55f51d2a19';

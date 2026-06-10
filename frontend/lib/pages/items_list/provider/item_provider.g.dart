@@ -45,4 +45,4 @@ final class ItemsListProvider
   }
 }
 
-String _$itemsListHash() => r'ec2fb84e647a1ac3261165e67fff24729cee9ca0';
+String _$itemsListHash() => r'e8f721ecead011fc8cbc2a88c5f84988474cc8d7';

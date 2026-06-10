@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/services/auth/auth_storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/pages/login/dto/login_request_body.dart';
 import 'package:budget_manager/pages/login/provider/login_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,9 +13,13 @@ class LoginNotifier extends _$LoginNotifier {
   Future<void> login({required String email, required String password}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await ref
+      final response = await ref
           .read(loginRepositoryProvider)
           .login(LoginRequestBody(email: email, password: password));
+
+      await ref
+          .read(authStateProvider.notifier)
+          .storeTokensOnAuth(response.accessToken, response.refreshToken);
     });
   }
 }

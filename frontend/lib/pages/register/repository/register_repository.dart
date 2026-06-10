@@ -1,18 +1,30 @@
+import 'dart:convert';
+
+import 'package:budget_manager/pages/login/dto/login_response_body.dart';
 import 'package:budget_manager/pages/register/dto/register_request_body.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
 class RegisterRepository {
-  final Dio _dio = GetIt.I.get<Dio>();
+  final Dio _dio;
+  const RegisterRepository({required this._dio});
 
-  //FIXME: take token after register and use it for rerouting to items
-  Future<dynamic> register(RegisterRequestBody body) async {
-    final baseUrl = GetIt.I.get<String>();
-    final response = await _dio.post(
-      '$baseUrl/auth/register',
-      data: body.toMap(),
-      options: Options(contentType: Headers.jsonContentType),
+  Future<AuthenticationResponse> register(RegisterRequestBody body) async {
+    final credentials = base64Encode(
+      utf8.encode('${body.email}:${body.password}'),
     );
-    return response.data;
+
+    final baseUrl = GetIt.I.get<String>();
+    await _dio.post('$baseUrl/auth/register', data: body.toMap());
+
+    final response = await Dio().post(
+      '$baseUrl/auth/token',
+      options: Options(headers: {'Authorization': 'Basic $credentials'}),
+    );
+
+    return AuthenticationResponse(
+      accessToken: response.data['access_token'],
+      refreshToken: response.data['refresh_token'],
+    );
   }
 }

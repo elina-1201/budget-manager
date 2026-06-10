@@ -1,17 +1,32 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:budget_manager/core/services/auth/auth_storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/pages/items_list/dto/item.dart';
 import 'package:budget_manager/pages/items_list/provider/item_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ItemsListScreen extends ConsumerWidget {
+class ItemsListScreen extends ConsumerStatefulWidget {
   const ItemsListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ItemsListScreen> createState() => _ItemsListScreenState();
+}
+
+class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
+  @override
+  Widget build(BuildContext context) {
+    _navigateBackToLogin(context);
     final itemsAsync = ref.watch(itemsListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Items')),
+      appBar: AppBar(
+        title: const Text('Items'),
+        leading: IconButton(
+          icon: Icon(Icons.logout_sharp),
+          onPressed: () {
+            ref.read(authStateProvider.notifier).logout();
+          },
+        ),
+      ),
       body: itemsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
@@ -26,6 +41,21 @@ class ItemsListScreen extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _navigateBackToLogin(BuildContext context) {
+    ref.listen<AsyncValue<bool>>(authStateProvider, (_, state) {
+      state.whenOrNull(
+        data: (isLoggedIn) {
+          if (!isLoggedIn) {
+            // User has been logged out → go back to login
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil('/login', (route) => false);
+          }
+        },
+      );
+    });
   }
 }
 
