@@ -1,6 +1,7 @@
 package org.artso.budget_manager.group;
 
 import lombok.AllArgsConstructor;
+import org.artso.budget_manager.group.dto.GroupDto;
 import org.artso.budget_manager.group.dto.GroupRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,7 @@ public class GroupController {
     }
 
     @GetMapping("/group")
-    public ResponseEntity<List<UserGroup>> getAllGroups(Authentication auth) {
+    public ResponseEntity<List<GroupDto>> getAllGroups(Authentication auth) {
         return new ResponseEntity<>(service.getAll(auth), HttpStatus.OK);
     }
-    //TODO: create dto for this
 }

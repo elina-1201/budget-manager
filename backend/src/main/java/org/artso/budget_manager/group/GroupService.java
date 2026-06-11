@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.artso.budget_manager.auth.AppUser;
 import org.artso.budget_manager.auth.AppUserService;
+import org.artso.budget_manager.group.dto.GroupDto;
 import org.artso.budget_manager.group.dto.GroupRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,8 @@ public class GroupService {
         groupRepo.save(group);
     }
 
-    public List<UserGroup> getAll(Authentication auth) {
-        return groupRepo.findAllByUsersEmailIgnoreCase(auth.getName());
+    public List<GroupDto> getAll(Authentication auth) {
+        List<UserGroup> groups = groupRepo.findAllByUsersEmailIgnoreCase(auth.getName());
+        return GroupDto.toDtoList(groups);
     }
 }

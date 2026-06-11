@@ -8,9 +8,9 @@ import org.artso.budget_manager.item.Item;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Getter
+@Setter
 @AllArgsConstructor
-    @Getter
-    @Setter
 public class ItemDto {
     private Long id;
     private String name;
