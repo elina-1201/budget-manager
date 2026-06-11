@@ -1,4 +1,4 @@
-import 'package:budget_manager/core/services/auth/auth_storage/provider/auth_state_provider.dart';
+import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

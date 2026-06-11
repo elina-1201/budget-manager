@@ -1,4 +1,4 @@
-import 'package:budget_manager/core/services/auth/auth_storage/auth_storage.dart';
+import 'package:budget_manager/core/services/auth/storage/auth_storage.dart';
 import 'package:dio/dio.dart';
 
 class AuthInterceptor extends Interceptor {
