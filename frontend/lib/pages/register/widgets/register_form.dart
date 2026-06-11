@@ -2,6 +2,7 @@ import 'package:budget_manager/pages/register/provider/register_notifier.dart';
 import 'package:budget_manager/shared_widgets/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
@@ -67,7 +68,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   void _navigateToItemsOnSuccess(BuildContext context) {
     ref.listen<AsyncValue<void>>(registerProvider, (_, state) {
       state.whenOrNull(
-        data: (_) => Navigator.of(context).pushReplacementNamed('/items'),
+        data: (_) => context.pushReplacement('/items'),
         error: (error, _) => ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(error.toString()))),

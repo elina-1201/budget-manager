@@ -3,6 +3,7 @@ import 'package:budget_manager/pages/items_list/dto/item.dart';
 import 'package:budget_manager/pages/items_list/provider/item_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ItemsListScreen extends ConsumerStatefulWidget {
   const ItemsListScreen({super.key});
@@ -36,7 +37,7 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/add_item');
+          context.push('/add_item');
         },
         child: const Icon(Icons.add),
       ),
@@ -48,10 +49,7 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
       state.whenOrNull(
         data: (isLoggedIn) {
           if (!isLoggedIn) {
-            // User has been logged out → go back to login
-            Navigator.of(
-              context,
-            ).pushNamedAndRemoveUntil('/login', (route) => false);
+            context.pushReplacement('/login');
           }
         },
       );

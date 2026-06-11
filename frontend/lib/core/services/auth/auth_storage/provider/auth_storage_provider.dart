@@ -1,4 +1,4 @@
-import 'package:budget_manager/core/services/auth/auth_storage.dart';
+import 'package:budget_manager/core/services/auth/auth_storage/auth_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
