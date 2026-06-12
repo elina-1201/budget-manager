@@ -13,7 +13,7 @@ part of 'category_notifier.dart';
 final categoryProvider = CategoryNotifierProvider._();
 
 final class CategoryNotifierProvider
-    extends $NotifierProvider<CategoryNotifier, List<Category>> {
+    extends $AsyncNotifierProvider<CategoryNotifier, List<Category>> {
   CategoryNotifierProvider._()
     : super(
         from: null,
@@ -31,29 +31,21 @@ final class CategoryNotifierProvider
   @$internal
   @override
   CategoryNotifier create() => CategoryNotifier();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<Category> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<Category>>(value),
-    );
-  }
 }
 
-String _$categoryNotifierHash() => r'07e3091a155f367e64fa64c944b3d3eb9f5b7082';
+String _$categoryNotifierHash() => r'eb40f0aadc3e94473e01a97077428b90236c5e20';
 
-abstract class _$CategoryNotifier extends $Notifier<List<Category>> {
-  List<Category> build();
+abstract class _$CategoryNotifier extends $AsyncNotifier<List<Category>> {
+  FutureOr<List<Category>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<List<Category>, List<Category>>;
+    final ref = this.ref as $Ref<AsyncValue<List<Category>>, List<Category>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<List<Category>, List<Category>>,
-              List<Category>,
+              AnyNotifier<AsyncValue<List<Category>>, List<Category>>,
+              AsyncValue<List<Category>>,
               Object?,
               Object?
             >;
