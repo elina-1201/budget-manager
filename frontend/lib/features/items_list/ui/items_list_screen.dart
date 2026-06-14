@@ -1,6 +1,6 @@
 import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/features/items_list/data/dto/item.dart';
-import 'package:budget_manager/features/items_list/provider/item_provider.dart';
+import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +15,6 @@ class ItemsListScreen extends ConsumerStatefulWidget {
 class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
   @override
   Widget build(BuildContext context) {
-    _navigateBackToLogin(context);
     final itemsAsync = ref.watch(itemsListProvider);
 
     return Scaffold(
@@ -42,18 +41,6 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  void _navigateBackToLogin(BuildContext context) {
-    ref.listen<AsyncValue<bool>>(authStateProvider, (_, state) {
-      state.whenOrNull(
-        data: (isLoggedIn) {
-          if (!isLoggedIn) {
-            context.pushReplacement('/login');
-          }
-        },
-      );
-    });
   }
 }
 

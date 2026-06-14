@@ -2,7 +2,6 @@ import 'package:budget_manager/features/auth/register/provider/register_notifier
 import 'package:budget_manager/shared/widget/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
@@ -34,7 +33,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    _navigateToItemsOnSuccess(context);
+    _listenToRegisterErrors(context);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -65,10 +64,9 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     );
   }
 
-  void _navigateToItemsOnSuccess(BuildContext context) {
+  void _listenToRegisterErrors(BuildContext context) {
     ref.listen<AsyncValue<void>>(registerProvider, (_, state) {
       state.whenOrNull(
-        data: (_) => context.pushReplacement('/items'),
         error: (error, _) => ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(error.toString()))),

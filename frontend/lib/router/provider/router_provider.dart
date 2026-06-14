@@ -8,20 +8,34 @@ part 'router_provider.g.dart';
 
 @riverpod
 GoRouter goRouter(Ref ref) {
+  final authState = ref.watch(authStateProvider);
+
   final router = GoRouter(
-    initialLocation: '/items',
+    initialLocation: '/splash',
     routes: routes,
-    redirect: (context, state) => redirectLogic(context, state, ref),
+    redirect: (context, state) => redirectLogic(context, state, authState),
   );
 
   return router;
 }
 
-String? redirectLogic(BuildContext context, GoRouterState state, Ref ref) {
-  final authAsync = ref.watch(authStateProvider);
-  final isAuthenticated = authAsync.asData?.value ?? false;
+String? redirectLogic(
+  BuildContext context,
+  GoRouterState state,
+  AsyncValue<bool> authState,
+) {
+  if (authState.isLoading) {
+    return state.uri.toString() == '/splash' ? null : '/splash';
+  }
+
+  final isAuthenticated = authState.asData?.value ?? false;
+
+  if (state.uri.toString() == '/splash') {
+    return isAuthenticated ? '/items' : '/login';
+  }
 
   const publicPaths = ['/login', '/register'];
+
   final isPublicPath = publicPaths.contains(state.matchedLocation);
 
   if (!isAuthenticated && !isPublicPath) return '/login';

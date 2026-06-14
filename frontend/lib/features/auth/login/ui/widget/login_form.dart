@@ -32,7 +32,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    _navigateToItemsOnSuccess(context);
+    _listenToLoginErrors(context);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -51,7 +51,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   .login(email: _email.text, password: _password.text),
             ),
             TextButton(
-              // onPressed: () => context.push('/register'),
               onPressed: () => context.push('/register'),
               child: const Text('Don\'t have an account? Register here'),
             ),
@@ -61,11 +60,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     );
   }
 
-  void _navigateToItemsOnSuccess(BuildContext context) {
+  void _listenToLoginErrors(BuildContext context) {
     ref.listen<AsyncValue<void>>(loginProvider, (_, state) {
       state.whenOrNull(
-        data: (_) => context.pushReplacement('/items'),
-
         error: (error, _) => ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(error.toString()))),

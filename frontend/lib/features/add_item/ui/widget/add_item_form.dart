@@ -1,46 +1,103 @@
 import 'package:budget_manager/features/add_item/data/dto/category.dart';
-import 'package:budget_manager/features/add_item/provider/category_notifier.dart';
-import 'package:budget_manager/features/add_item/provider/selected_category_notifier.dart';
+import 'package:budget_manager/features/add_item/provider/category/category_notifier.dart';
+import 'package:budget_manager/features/add_item/provider/category/selected_category_notifier.dart';
+import 'package:budget_manager/features/add_item/provider/item/add_item_notifier.dart';
 import 'package:budget_manager/features/add_item/ui/widget/drop_down.dart';
+import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddItemForm extends StatefulWidget {
+class AddItemForm extends ConsumerStatefulWidget {
   const AddItemForm({super.key});
 
   @override
-  State<AddItemForm> createState() => _AddItemFormState();
+  ConsumerState<AddItemForm> createState() => _AddItemFormState();
 }
 
-class _AddItemFormState extends State<AddItemForm> {
+class _AddItemFormState extends ConsumerState<AddItemForm> {
+  late final TextEditingController _name;
+  late final TextEditingController _description;
+  late final TextEditingController _amount;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = TextEditingController();
+    _description = TextEditingController();
+    _amount = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _description.dispose();
+    _amount.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final addItemState = ref.watch(addItemProvider);
+
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
-          TextField(decoration: InputDecoration(labelText: 'Item Name')),
-          TextField(decoration: InputDecoration(labelText: 'Description')),
+          TextField(
+            decoration: InputDecoration(labelText: 'Item Name'),
+            controller: _name,
+          ),
+          TextField(
+            decoration: InputDecoration(labelText: 'Description'),
+            controller: _description,
+          ),
           TextField(
             decoration: InputDecoration(labelText: 'Amount'),
             keyboardType: TextInputType.number,
+            controller: _amount,
           ),
-          Consumer(
-            builder: (context, ref, child) {
-              final categories = ref.watch(categoryProvider);
-              return GenericDropDown<Category>(
-                list: categories,
-                selected: ref.watch(selectedCategoryProvider),
-                onChanged: (Category? value) {
-                  ref.read(selectedCategoryProvider.notifier).select(value);
-                },
-                itemLabel: (Category c) => c.name,
-              );
+          GenericDropDown<Category>(
+            list: ref.watch(categoryProvider),
+            selected: ref.watch(selectedCategoryProvider),
+            onChanged: (Category? value) {
+              ref.read(selectedCategoryProvider.notifier).select(value);
             },
+            itemLabel: (Category c) => c.name,
           ),
-          ElevatedButton(onPressed: () {}, child: Text('Add Item')),
+          ElevatedButton(
+            onPressed: () =>
+                _addNewItem(ref, addItemState, _name, _description, _amount),
+            child: addItemState.when(
+              data: (data) => const Text('Add Item'),
+              error: (error, stackTrace) => Text('Error: $error'),
+              loading: () => const CircularProgressIndicator(),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  void _addNewItem(
+    WidgetRef ref,
+    AsyncValue addItemState,
+    TextEditingController name,
+    TextEditingController description,
+    TextEditingController amount,
+  ) async {
+    await ref
+        .read(addItemProvider.notifier)
+        .addItem(
+          name: name.text,
+          description: description.text,
+          amount: double.tryParse(amount.text) ?? 0.0,
+          categoryId: ref.read(selectedCategoryProvider)?.id ?? 0,
+        );
+
+    await ref.read(itemsListProvider.notifier).refresh();
+
+    name.clear();
+    description.clear();
+    amount.clear();
   }
 }

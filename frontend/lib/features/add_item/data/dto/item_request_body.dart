@@ -1,15 +1,15 @@
 class ItemRequestBody {
   final String name;
-  final String description;
+  final String? description;
   final double amount;
-  final List<int> sharedGroupIds;
+  final List<int>? sharedGroupIds;
   final int categoryId;
 
   ItemRequestBody({
     required this.name,
-    required this.description,
+    this.description,
     required this.amount,
-    required this.sharedGroupIds,
+    this.sharedGroupIds,
     required this.categoryId,
   });
 
@@ -21,5 +21,10 @@ class ItemRequestBody {
       'sharedGroupIds': sharedGroupIds,
       'categoryId': categoryId,
     };
+  }
+
+  @override
+  String toString() {
+    return 'ItemRequestBody(name: $name, description: $description, amount: $amount, sharedGroupIds: $sharedGroupIds, categoryId: $categoryId)';
   }
 }
