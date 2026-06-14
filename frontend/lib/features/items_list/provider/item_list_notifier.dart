@@ -9,7 +9,9 @@ part 'item_list_notifier.g.dart';
 class ItemsListNotifier extends _$ItemsListNotifier {
   @override
   Future<List<Item>> build() async {
-    await ref.watch(authStateProvider.future);
+    final isAuthenticated = await ref.watch(authStateProvider.future);
+    if (!isAuthenticated) return [];
+
     final repository = ref.watch(itemRepositoryProvider);
     return repository.fetchItems();
   }
