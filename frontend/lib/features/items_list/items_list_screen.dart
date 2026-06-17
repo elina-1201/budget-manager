@@ -1,6 +1,6 @@
 import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
-import 'package:budget_manager/features/items_list/data/dto/item.dart';
 import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
+import 'package:budget_manager/features/items_list/ui/widget/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,25 +54,5 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
         },
       );
     });
-  }
-}
-
-class ItemsList extends StatelessWidget {
-  const ItemsList({super.key, required this.items});
-  final List<Item> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return ListTile(
-          title: Text(item.name),
-          subtitle: Text(item.description),
-          trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
-        );
-      },
-    );
   }
 }

@@ -12,4 +12,8 @@ class ItemRepository {
 
     return (response.data as List).map((e) => Item.fromMap(e)).toList();
   }
+
+  Future<void> deleteItem(int itemId) async {
+    await _dio.delete('$baseUrl/item/$itemId');
+  }
 }

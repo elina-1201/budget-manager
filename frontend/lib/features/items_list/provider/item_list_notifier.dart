@@ -9,7 +9,7 @@ part 'item_list_notifier.g.dart';
 class ItemsListNotifier extends _$ItemsListNotifier {
   @override
   Future<List<Item>> build() async {
-    final isAuthenticated = await ref.watch(authStateProvider.future);
+    final bool isAuthenticated = await ref.watch(authStateProvider.future);
     if (!isAuthenticated) return [];
 
     final repository = ref.watch(itemRepositoryProvider);
@@ -17,9 +17,17 @@ class ItemsListNotifier extends _$ItemsListNotifier {
   }
 
   Future<void> refresh() async {
-    // state = const AsyncValue.loading();
+    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final repository = ref.watch(itemRepositoryProvider);
+      return repository.fetchItems();
+    });
+  }
+
+  Future<void> deleteItem(int itemId) async {
+    final repository = ref.watch(itemRepositoryProvider);
+    await repository.deleteItem(itemId);
+    state = await AsyncValue.guard(() async {
       return repository.fetchItems();
     });
   }

@@ -48,4 +48,4 @@ final class ApiBaseUrlProvider
   }
 }
 
-String _$apiBaseUrlHash() => r'f0b1ba1612b2ea26f3f01690fa47723bf2ab1e12';
+String _$apiBaseUrlHash() => r'ff4b263b52249b0f902d95c820b7b5152ec7db38';

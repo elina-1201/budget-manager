@@ -3,7 +3,6 @@ import 'package:budget_manager/features/add_item/provider/category/category_noti
 import 'package:budget_manager/features/add_item/provider/category/selected_category_notifier.dart';
 import 'package:budget_manager/features/add_item/provider/item/add_item_notifier.dart';
 import 'package:budget_manager/features/add_item/ui/widget/drop_down.dart';
-import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -85,17 +84,24 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     TextEditingController description,
     TextEditingController amount,
   ) async {
-    await ref
-        .read(addItemProvider.notifier)
-        .addItem(
-          name: name.text,
-          description: description.text,
-          amount: double.tryParse(amount.text) ?? 0.0,
-          categoryId: ref.read(selectedCategoryProvider)?.id ?? 0,
-        );
+    try {
+      await ref
+          .read(addItemProvider.notifier)
+          .addItem(
+            name: name.text,
+            description: description.text,
+            amount: double.tryParse(amount.text) ?? 0.0,
+            categoryId: ref.read(selectedCategoryProvider)?.id ?? 0,
+          );
 
-    await ref.read(itemsListProvider.notifier).refresh();
-
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Added successfully')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to add item: $e')));
+    }
     name.clear();
     description.clear();
     amount.clear();

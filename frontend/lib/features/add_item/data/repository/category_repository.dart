@@ -8,14 +8,7 @@ class CategoryRepository {
   CategoryRepository({required this._dio, required this._baseUrl});
   Future<List<Category>> getUsersCategories() async {
     final response = await _dio.get('$_baseUrl/category');
-    final data = response.data as List<dynamic>;
-    return data
-        .map(
-          (e) => Category(
-            id: (e['id'] as num).toInt(),
-            name: e['name'] as String,
-          ),
-        )
-        .toList();
+
+    return (response.data as List).map((e) => Category.fromMap(e)).toList();
   }
 }

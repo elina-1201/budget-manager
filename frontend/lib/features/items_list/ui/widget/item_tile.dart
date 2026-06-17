@@ -1,0 +1,35 @@
+import 'package:budget_manager/features/items_list/data/dto/item.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class ItemTile extends StatelessWidget {
+  const ItemTile({super.key, required this.item});
+
+  final Item item;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(item.name),
+      subtitle: Text(item.description),
+      trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
+      onTap: () {
+        context.push('/item_details', extra: item);
+      },
+    );
+  }
+}
+
+class DeleteBackground extends StatelessWidget {
+  const DeleteBackground({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(right: 20.0),
+      color: const Color.fromARGB(255, 133, 27, 19),
+      alignment: Alignment.centerRight,
+      child: Icon(Icons.delete_outlined, color: Colors.white),
+    );
+  }
+}
