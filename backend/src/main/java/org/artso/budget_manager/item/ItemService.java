@@ -40,11 +40,10 @@ public class ItemService {
         Category category = categoryRepo.findById(request.categoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with id: " + request.categoryId() + " not found"));
 
-        if(request.sharedGroupIds() == null || request.sharedGroupIds().isEmpty()) {
+        if (request.sharedGroupIds() == null || request.sharedGroupIds().isEmpty()) {
             sharedGroups = Collections.emptySet();
-        }
-        else {
-            sharedGroups  = (Set<UserGroup>) groupRepo.findAllById(request.sharedGroupIds());
+        } else {
+            sharedGroups = (Set<UserGroup>) groupRepo.findAllById(request.sharedGroupIds());
         }
         Item item = new Item();
         requestToEntityMapper.mapFromRequestToEntity(request, item);
@@ -73,5 +72,12 @@ public class ItemService {
 
         item.setSharedGroups(sharedGroups);
         return itemRepo.save(item);
+    }
+
+    @PreAuthorize("@itemAuth.canEdit(authentication, #itemId)")
+    public void deleteItem(Long itemId) {
+        Item item = itemRepo.findById(itemId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        itemRepo.delete(item);
     }
 }

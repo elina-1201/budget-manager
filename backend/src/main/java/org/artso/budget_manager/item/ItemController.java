@@ -27,4 +27,10 @@ public class ItemController {
     public ResponseEntity<List<ItemDto>> getItems(Authentication auth) {
         return new ResponseEntity<>(service.getAllItems(auth), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteItems(@PathVariable Long id) {
+        service.deleteItem(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
