@@ -1,4 +1,4 @@
-import 'package:budget_manager/features/items_list/data/dto/item.dart';
+import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +9,6 @@ class AlertOnDelete extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final item = ModalRoute.of(context)!.settings.arguments as Item;
     return AlertDialog(
       title: const Text("Confirm Deletion"),
       content: const Text("Are you sure you want to delete this item?"),
@@ -38,6 +37,7 @@ class AlertOnDelete extends ConsumerWidget {
   ) async {
     final notifier = ref.read(itemsListProvider.notifier);
     await notifier.deleteItem(item.id);
+    await ref.read(itemsListProvider.notifier).refresh();
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

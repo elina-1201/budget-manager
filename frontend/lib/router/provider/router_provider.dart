@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/services/auth/auth_mode_enum.dart';
 import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/router/routes.dart';
 import 'package:flutter/material.dart';
@@ -22,24 +23,32 @@ GoRouter goRouter(Ref ref) {
 String? redirectLogic(
   BuildContext context,
   GoRouterState state,
-  AsyncValue<bool> authState,
+  AsyncValue<AuthMode> authState,
 ) {
+  final path = state.uri.toString();
+
   if (authState.isLoading) {
-    return state.uri.toString() == '/splash' ? null : '/splash';
+    return path == '/splash' ? null : '/splash';
   }
 
-  final isAuthenticated = authState.asData?.value ?? false;
+  final authMode = authState.asData?.value;
 
-  if (state.uri.toString() == '/splash') {
-    return isAuthenticated ? '/items' : '/login';
+  if (path == '/splash') {
+    if (authMode == AuthMode.authenticated || authMode == AuthMode.guest) {
+      return '/items';
+    } else {
+      return '/login';
+    }
   }
 
   const publicPaths = ['/login', '/register'];
 
   final isPublicPath = publicPaths.contains(state.matchedLocation);
+  final hasAccess =
+      authMode == AuthMode.authenticated || authMode == AuthMode.guest;
 
-  if (!isAuthenticated && !isPublicPath) return '/login';
-  if (isAuthenticated && isPublicPath) return '/items';
+  if (!hasAccess && !isPublicPath) return '/login';
+  if (hasAccess && isPublicPath) return '/items';
 
   return null;
 }

@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/features/auth/login/provider/login_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +54,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             TextButton(
               onPressed: () => context.push('/register'),
               child: const Text('Don\'t have an account? Register here'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await ref.read(authStateProvider.notifier).enterGuestMode();
+              },
+              child: const Text('Continue as Guest'),
             ),
           ],
         ),

@@ -3,11 +3,10 @@ import 'package:dio/dio.dart';
 
 class CategoryRepository {
   final Dio _dio;
-  final String _baseUrl;
 
-  CategoryRepository({required this._dio, required this._baseUrl});
+  CategoryRepository({required this._dio});
   Future<List<Category>> getUsersCategories() async {
-    final response = await _dio.get('$_baseUrl/category');
+    final response = await _dio.get('/category');
 
     return (response.data as List).map((e) => Category.fromMap(e)).toList();
   }

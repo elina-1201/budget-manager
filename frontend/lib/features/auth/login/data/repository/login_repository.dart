@@ -7,15 +7,14 @@ import '../dto/login_response_body.dart';
 
 class LoginRepository {
   final Dio _dio;
-  final String baseUrl;
-  LoginRepository({required this._dio, required this.baseUrl});
+  LoginRepository({required this._dio});
 
   Future<AuthenticationResponse> login(LoginRequestBody body) async {
     final credentials = base64Encode(
       utf8.encode('${body.email}:${body.password}'),
     );
     final response = await _dio.post(
-      '$baseUrl/auth/token',
+      '/auth/token',
       options: Options(headers: {'Authorization': 'Basic $credentials'}),
     );
     final token = response.data['access_token'];

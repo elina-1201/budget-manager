@@ -1,4 +1,4 @@
-import 'package:budget_manager/features/items_list/data/dto/item.dart';
+import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:budget_manager/features/items_list/ui/widget/alert_on_delete.dart';
 import 'package:budget_manager/features/items_list/ui/widget/item_tile.dart';
 import 'package:flutter/material.dart';

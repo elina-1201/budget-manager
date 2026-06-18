@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/services/auth/auth_mode_enum.dart';
 import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
 import 'package:budget_manager/features/items_list/ui/widget/items_list.dart';
@@ -45,10 +46,10 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
   }
 
   void _navigateBackToLogin(BuildContext context) {
-    ref.listen<AsyncValue<bool>>(authStateProvider, (_, state) {
+    ref.listen<AsyncValue<AuthMode>>(authStateProvider, (_, state) {
       state.whenOrNull(
-        data: (isLoggedIn) {
-          if (!isLoggedIn) {
+        data: (authMode) {
+          if (authMode == AuthMode.unauthenticated) {
             context.pushReplacement('/login');
           }
         },

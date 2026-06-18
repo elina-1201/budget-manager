@@ -1,4 +1,3 @@
-import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
 import 'package:budget_manager/features/add_item/data/dto/category.dart';
 import 'package:budget_manager/features/add_item/provider/category/category_repo_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -9,9 +8,6 @@ part 'category_notifier.g.dart';
 class CategoryNotifier extends _$CategoryNotifier {
   @override
   Future<List<Category>> build() async {
-    final isAuthenticated = await ref.watch(authStateProvider.future);
-    if (!isAuthenticated) return [];
-
     return await _loadCategories();
   }
 

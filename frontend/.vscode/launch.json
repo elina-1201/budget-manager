@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter (physical device)",
+            "type": "dart",
+            "request": "launch",
+            "args": [
+                "--dart-define=PHYSICAL_DEVICE=true"
+            ]
+        },
+        {
+            "name": "Flutter (emulator)",
+            "type": "dart",
+            "request": "launch"
+        }
+    ]
+}

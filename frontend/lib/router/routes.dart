@@ -1,8 +1,8 @@
+import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:budget_manager/features/add_item/ui/add_item_screen.dart';
 import 'package:budget_manager/features/auth/login/ui/login_screen.dart';
 import 'package:budget_manager/features/auth/register/ui/register_screen.dart';
 import 'package:budget_manager/features/item_details/item_details_screen.dart';
-import 'package:budget_manager/features/items_list/data/dto/item.dart';
 import 'package:budget_manager/features/items_list/ui/items_list_screen.dart';
 import 'package:budget_manager/shared/app_shell/app_shell.dart';
 import 'package:budget_manager/shared/splash_screen/splash_screen.dart';

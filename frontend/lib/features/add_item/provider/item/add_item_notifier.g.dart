@@ -33,7 +33,7 @@ final class AddItemNotifierProvider
   AddItemNotifier create() => AddItemNotifier();
 }
 
-String _$addItemNotifierHash() => r'cf18ccd2d7f79a0c4ba9fde703dad5d3fd5bcbb5';
+String _$addItemNotifierHash() => r'80a6bd8009ee6e7d3f78ef96359ca66d54db5dd0';
 
 abstract class _$AddItemNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();

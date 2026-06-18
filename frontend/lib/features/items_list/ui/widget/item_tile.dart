@@ -1,4 +1,4 @@
-import 'package:budget_manager/features/items_list/data/dto/item.dart';
+import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
