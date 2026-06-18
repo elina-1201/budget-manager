@@ -8,11 +8,6 @@ class RemoteItemRepo implements ItemRepository {
   RemoteItemRepo({required this._dio});
 
   @override
-  Future<void> deleteItem({required int itemId}) async {
-    await _dio.delete('/item/$itemId');
-  }
-
-  @override
   Future<List<Item>> getItems() async {
     final response = await _dio.get('/item');
 
@@ -28,5 +23,10 @@ class RemoteItemRepo implements ItemRepository {
   Future<void> updateItem({required ItemRequestBody body}) async {
     // TODO: implement updateItem
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteItem({required int itemId}) async {
+    await _dio.delete('/item/$itemId');
   }
 }

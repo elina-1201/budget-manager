@@ -1,5 +1,5 @@
-import 'package:budget_manager/features/add_item/data/dto/category.dart';
-import 'package:budget_manager/features/add_item/provider/category/category_repo_provider.dart';
+import 'package:budget_manager/core/data/dto/category.dart';
+import 'package:budget_manager/core/data/provider/category_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_notifier.g.dart';
@@ -14,21 +14,17 @@ class CategoryNotifier extends _$CategoryNotifier {
   Future<List<Category>> _loadCategories() async {
     state = await AsyncValue.guard(() async {
       final repo = ref.read(categoryRepositoryProvider);
-      return await repo.getUsersCategories();
+      return await repo.getCategories();
     });
     return state.value ?? [];
   }
 
-  // @override
-  // void update(List<Category> categories) {
-  //   state = [...categories];
-  // }
-
-  // // Optional helper to manually refresh
-  // Future<void> refresh() async => _loadCategories();
-
-  // // Example of adding a new category locally
-  // void add(Category category) {
-  //   state = [...state, category];
-  // }
+  void addCategory({required String name}) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repo = ref.read(categoryRepositoryProvider);
+      await repo.saveCategory(categoryName: name);
+      return await _loadCategories();
+    });
+  }
 }

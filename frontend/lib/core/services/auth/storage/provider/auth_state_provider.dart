@@ -2,6 +2,8 @@ import 'package:budget_manager/core/services/auth/auth_mode_enum.dart';
 import 'package:budget_manager/core/services/auth/storage/provider/auth_storage_provider.dart';
 import 'package:budget_manager/core/services/dio/dio_provider.dart';
 import 'package:budget_manager/core/services/shared_prefs/provider/shared_prefs_provider.dart';
+import 'package:budget_manager/features/add_item/provider/category/category_notifier.dart';
+import 'package:budget_manager/features/add_item/provider/category/selected_category_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -85,6 +87,8 @@ class AuthState extends _$AuthState {
     final prefs = await ref.read(sharedPreferencesProvider.future);
     await prefs.remove(_guestKey);
     await ref.read(authStorageProvider).deleteTokens();
+    ref.invalidate(categoryProvider);
+    ref.invalidate(selectedCategoryProvider);
     ref.invalidateSelf();
     state = const AsyncData(AuthMode.unauthenticated);
   }

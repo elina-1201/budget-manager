@@ -1,4 +1,4 @@
-import 'package:budget_manager/features/add_item/data/dto/category.dart';
+import 'package:budget_manager/core/data/dto/category.dart';
 import 'package:budget_manager/features/add_item/provider/category/category_notifier.dart';
 import 'package:budget_manager/features/add_item/provider/category/selected_category_notifier.dart';
 import 'package:budget_manager/features/add_item/provider/item/add_item_notifier.dart';
@@ -18,6 +18,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
   late final TextEditingController _name;
   late final TextEditingController _description;
   late final TextEditingController _amount;
+  late final TextEditingController _categoryName;
 
   @override
   void initState() {
@@ -25,6 +26,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     _name = TextEditingController();
     _description = TextEditingController();
     _amount = TextEditingController();
+    _categoryName = TextEditingController();
   }
 
   @override
@@ -32,6 +34,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     _name.dispose();
     _description.dispose();
     _amount.dispose();
+    _categoryName.dispose();
     super.dispose();
   }
 
@@ -73,9 +76,28 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
               loading: () => const CircularProgressIndicator(),
             ),
           ),
+
+          TextField(
+            decoration: InputDecoration(labelText: 'Category'),
+            controller: _categoryName,
+          ),
+          ElevatedButton(
+            onPressed: () => _addCategory(),
+            child: const Text('Add Category'),
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> _addCategory() async {
+    {
+      final categoryName = _categoryName.text;
+      if (categoryName.isNotEmpty) {
+        ref.read(categoryProvider.notifier).addCategory(name: categoryName);
+        _categoryName.clear();
+      }
+    }
   }
 
   void _addNewItem(
