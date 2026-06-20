@@ -32,9 +32,11 @@ String? redirectLogic(
   }
 
   final authMode = authState.asData?.value;
+  final hasAccess =
+      authMode == AuthMode.authenticated || authMode == AuthMode.guest;
 
   if (path == '/splash') {
-    if (authMode == AuthMode.authenticated || authMode == AuthMode.guest) {
+    if (hasAccess) {
       return '/items';
     } else {
       return '/login';
@@ -42,10 +44,7 @@ String? redirectLogic(
   }
 
   const publicPaths = ['/login', '/register'];
-
   final isPublicPath = publicPaths.contains(state.matchedLocation);
-  final hasAccess =
-      authMode == AuthMode.authenticated || authMode == AuthMode.guest;
 
   if (!hasAccess && !isPublicPath) return '/login';
   if (hasAccess && isPublicPath) return '/items';

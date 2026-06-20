@@ -20,12 +20,6 @@ class RemoteCategoryRepo implements CategoryRepository {
   }
 
   @override
-  Future<void> updateCategory({required Category category}) async {
-    // TODO: implement updateCategory
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> deleteCategory({required int categoryId}) async {
     // TODO: implement deleteCategory
     throw UnimplementedError();

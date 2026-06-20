@@ -1,5 +1,5 @@
 import 'package:budget_manager/core/data/dto/category.dart';
-import 'package:budget_manager/core/data/provider/category_repository_provider.dart';
+import 'package:budget_manager/core/data/provider/category/category_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_notifier.g.dart';

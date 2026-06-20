@@ -1,4 +1,4 @@
-import 'package:budget_manager/core/data/provider/item_repository_provider.dart';
+import 'package:budget_manager/core/data/provider/item/item_repository_provider.dart';
 import 'package:budget_manager/features/add_item/data/dto/item_request_body.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
