@@ -1,5 +1,6 @@
 import 'package:budget_manager/core/data/dto/category.dart';
 import 'package:budget_manager/core/data/dto/item.dart';
+import 'package:budget_manager/core/data/dto/item_local_model.dart';
 import 'package:budget_manager/core/data/repository/item/item_repository_i.dart';
 import 'package:budget_manager/features/add_item/data/dto/item_request_body.dart';
 import 'package:sqflite/sqflite.dart';
@@ -47,28 +48,5 @@ class LocalItemRepo implements ItemRepository {
   Future<int> deleteItem({required int itemId}) {
     // TODO: implement deleteItem
     throw UnimplementedError();
-  }
-}
-
-class ItemLocalModel {
-  final String name;
-  final String? description;
-  final double amount;
-  final String categoryName;
-
-  ItemLocalModel({
-    required this.name,
-    this.description,
-    required this.amount,
-    required this.categoryName,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'description': description,
-      'amount': amount,
-      'category': categoryName,
-    };
   }
 }
