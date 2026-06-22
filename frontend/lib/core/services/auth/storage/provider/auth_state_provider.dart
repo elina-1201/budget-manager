@@ -20,7 +20,10 @@ class AuthState extends _$AuthState {
 
     if (prefs.getBool(_guestKey) ?? false) return AuthMode.guest;
     final bool isTokenValid = await _isTokenValidOrRefresh();
-    return isTokenValid ? AuthMode.authenticated : AuthMode.unauthenticated;
+    if (isTokenValid) return AuthMode.authenticated;
+
+    await prefs.setBool(_guestKey, true);
+    return AuthMode.guest;
   }
 
   Future<bool> _isTokenValidOrRefresh() async {
@@ -84,12 +87,16 @@ class AuthState extends _$AuthState {
   }
 
   Future<void> logout() async {
-    final prefs = await ref.read(sharedPreferencesProvider.future);
-    await prefs.remove(_guestKey);
+    // final prefs = await ref.read(sharedPreferencesProvider.future);
+    // await prefs.remove(_guestKey);
     await ref.read(authStorageProvider).deleteTokens();
+    _invalidateProviders();
+    state = const AsyncData(AuthMode.unauthenticated);
+  }
+
+  void _invalidateProviders() {
     ref.invalidate(categoryProvider);
     ref.invalidate(selectedCategoryProvider);
     ref.invalidateSelf();
-    state = const AsyncData(AuthMode.unauthenticated);
   }
 }

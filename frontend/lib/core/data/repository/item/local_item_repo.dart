@@ -46,7 +46,6 @@ class LocalItemRepo implements ItemRepository {
 
   @override
   Future<int> deleteItem({required int itemId}) {
-    // TODO: implement deleteItem
-    throw UnimplementedError();
+    return db.delete(tableName, where: 'id = ?', whereArgs: [itemId]);
   }
 }

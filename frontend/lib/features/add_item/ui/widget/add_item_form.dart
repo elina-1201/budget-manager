@@ -4,6 +4,7 @@ import 'package:budget_manager/features/add_item/provider/category/selected_cate
 import 'package:budget_manager/features/add_item/provider/item/add_item_notifier.dart';
 import 'package:budget_manager/features/add_item/ui/widget/drop_down.dart';
 import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
+import 'package:budget_manager/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,6 +16,8 @@ class AddItemForm extends ConsumerStatefulWidget {
 }
 
 class _AddItemFormState extends ConsumerState<AddItemForm> {
+  final _formKey = GlobalKey<FormState>();
+
   late final TextEditingController _name;
   late final TextEditingController _description;
   late final TextEditingController _amount;
@@ -44,48 +47,55 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
 
     return Padding(
       padding: EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            decoration: InputDecoration(labelText: 'Item Name'),
-            controller: _name,
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: 'Description'),
-            controller: _description,
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: 'Amount'),
-            keyboardType: TextInputType.number,
-            controller: _amount,
-          ),
-          GenericDropDown<Category>(
-            list: ref.watch(categoryProvider),
-            selected: ref.watch(selectedCategoryProvider),
-            onChanged: (Category? value) {
-              ref.read(selectedCategoryProvider.notifier).select(value);
-            },
-            itemLabel: (Category c) => c.name,
-          ),
-          ElevatedButton(
-            onPressed: () =>
-                _addNewItem(ref, addItemState, _name, _description, _amount),
-            child: addItemState.when(
-              data: (data) => const Text('Add Item'),
-              error: (error, stackTrace) => Text('Error: $error'),
-              loading: () => const CircularProgressIndicator(),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Item Name'),
+              controller: _name,
+              validator: Validator.required(),
             ),
-          ),
-
-          TextField(
-            decoration: InputDecoration(labelText: 'Category'),
-            controller: _categoryName,
-          ),
-          ElevatedButton(
-            onPressed: () => _addCategory(),
-            child: const Text('Add Category'),
-          ),
-        ],
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Description'),
+              controller: _description,
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Amount'),
+              keyboardType: TextInputType.number,
+              controller: _amount,
+              validator: Validator.positiveNumber(),
+            ),
+            GenericDropDown<Category>(
+              list: ref.watch(categoryProvider),
+              selected: ref.watch(selectedCategoryProvider),
+              onChanged: (Category? value) {
+                ref.read(selectedCategoryProvider.notifier).select(value);
+              },
+              itemLabel: (Category c) => c.name,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _addNewItem(ref, addItemState, _name, _description, _amount);
+                }
+              },
+              child: addItemState.when(
+                data: (data) => const Text('Add Item'),
+                error: (error, stackTrace) => Text('Error: $error'),
+                loading: () => const CircularProgressIndicator(),
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: 'Category'),
+              controller: _categoryName,
+            ),
+            ElevatedButton(
+              onPressed: () => _addCategory(),
+              child: const Text('Add Category'),
+            ),
+          ],
+        ),
       ),
     );
   }
