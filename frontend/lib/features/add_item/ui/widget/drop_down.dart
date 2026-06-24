@@ -1,12 +1,15 @@
-import 'package:budget_manager/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GenericDropDown<T> extends ConsumerWidget {
+class GenericDropDown<T> extends ConsumerStatefulWidget {
   final AsyncValue<List<T>> list;
   final T? selected;
   final void Function(T?) onChanged;
   final String Function(T) itemLabel;
+  final VoidCallback? onAddRequest;
+  final String? addButtonLabel;
+  final String? hintText;
+  final void Function(T)? onDelete;
 
   const GenericDropDown({
     super.key,
@@ -14,27 +17,76 @@ class GenericDropDown<T> extends ConsumerWidget {
     this.selected,
     required this.onChanged,
     required this.itemLabel,
+    this.onAddRequest,
+    this.addButtonLabel,
+    this.hintText,
+    this.onDelete,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return DropdownButtonFormField<T>(
-      hint: const Text('Select an option'),
-      isExpanded: true,
-      initialValue: selected,
-      onChanged: onChanged,
-      items: list.when(
-        data: (items) => items.map<DropdownMenuItem<T>>((T item) {
-          return DropdownMenuItem<T>(value: item, child: Text(itemLabel(item)));
-        }).toList(),
-        loading: () => [DropdownMenuItem<T>(child: Text('Loading options...'))],
-        error: (_, _) => [
-          DropdownMenuItem<T>(child: Text('Error loading options')),
-        ],
-      ),
-      validator: Validator.requiredSelection<T>(
-        message: 'Please select an option',
-      ),
+  ConsumerState<GenericDropDown<T>> createState() => _GenericDropDownState<T>();
+}
+
+class _GenericDropDownState<T> extends ConsumerState<GenericDropDown<T>> {
+  final TextEditingController _dropdownController = TextEditingController();
+
+  @override
+  void dispose() {
+    _dropdownController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FormField<T>(
+      initialValue: widget.selected,
+      validator: (_) => widget.selected == null ? 'Select an option' : null,
+      builder: (FormFieldState<T> state) {
+        return DropdownMenu<T?>(
+          controller: _dropdownController,
+          initialSelection: widget.selected,
+          hintText: widget.hintText ?? 'Select an option',
+          onSelected: (T? value) {
+            if (widget.onAddRequest != null && value == null) {
+              widget.onAddRequest!();
+              _dropdownController.clear();
+              state.didChange(null);
+            } else {
+              state.didChange(value);
+              widget.onChanged(value);
+            }
+          },
+          errorText: state.errorText,
+          expandedInsets: EdgeInsets.zero,
+          dropdownMenuEntries: widget.list.when(
+            data: (items) => [
+              if (widget.onAddRequest != null)
+                DropdownMenuEntry<T?>(
+                  value: null,
+                  // label: widget.addButtonLabel ?? 'Add new',
+                  label: '',
+                  leadingIcon: const Icon(Icons.add, size: 20),
+                ),
+              ...items.map<DropdownMenuEntry<T?>>((T item) {
+                return DropdownMenuEntry<T?>(
+                  value: item,
+                  label: widget.itemLabel(item),
+                  trailingIcon: GestureDetector(
+                    onTap: () {
+                      // state.didChange(null);
+                      widget.onDelete?.call(item);
+                      _dropdownController.clear();
+                    },
+                    child: const Icon(Icons.delete),
+                  ),
+                );
+              }),
+            ],
+            error: (_, _) => const [],
+            loading: () => const [],
+          ),
+        );
+      },
     );
   }
 }

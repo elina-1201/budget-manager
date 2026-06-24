@@ -10,11 +10,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'category_repository_provider.g.dart';
 
 @riverpod
-CategoryRepository categoryRepository(Ref ref) {
+Future<CategoryRepository> categoryRepository(Ref ref) async {
   final mode = ref.watch(authStateProvider).asData?.value;
-  return mode == AuthMode.authenticated
-      ? RemoteCategoryRepo(dio: ref.watch(dioProvider))
-      : LocalCategoryRepo(
-          db: ref.watch(databaseConnectionProvider).requireValue,
-        );
+  if (mode == AuthMode.authenticated) {
+    return RemoteCategoryRepo(dio: ref.watch(dioProvider));
+  }
+  final db = await ref.read(databaseConnectionProvider.future);
+  return LocalCategoryRepo(db: db);
 }

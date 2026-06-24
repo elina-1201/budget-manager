@@ -16,6 +16,7 @@ class ItemDetailsScreen extends StatelessWidget {
             Text('Name: ${item.name}'),
             Text('Description: ${item.description}'),
             Text('Amount: ${item.amount.toStringAsFixed(2)} KM'),
+            Text('Category: ${item.category}'),
           ],
         ),
       ),

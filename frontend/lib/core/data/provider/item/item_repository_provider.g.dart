@@ -13,8 +13,13 @@ part of 'item_repository_provider.dart';
 final itemRepositoryProvider = ItemRepositoryProvider._();
 
 final class ItemRepositoryProvider
-    extends $FunctionalProvider<ItemRepository, ItemRepository, ItemRepository>
-    with $Provider<ItemRepository> {
+    extends
+        $FunctionalProvider<
+          AsyncValue<ItemRepository>,
+          ItemRepository,
+          FutureOr<ItemRepository>
+        >
+    with $FutureModifier<ItemRepository>, $FutureProvider<ItemRepository> {
   ItemRepositoryProvider._()
     : super(
         from: null,
@@ -31,21 +36,14 @@ final class ItemRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<ItemRepository> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $FutureProviderElement<ItemRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  ItemRepository create(Ref ref) {
+  FutureOr<ItemRepository> create(Ref ref) {
     return itemRepository(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ItemRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ItemRepository>(value),
-    );
   }
 }
 
-String _$itemRepositoryHash() => r'91cec2689c17ef998dc946735672274b701c037b';
+String _$itemRepositoryHash() => r'a78b83625d31b620c54120c9dc5f7f651d696d17';

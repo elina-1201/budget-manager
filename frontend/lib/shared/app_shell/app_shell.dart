@@ -12,7 +12,8 @@ class AppShell extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,
-        onTap: (index) => navigationShell.goBranch(index),
+        onTap: (index) =>
+            navigationShell.goBranch(index, initialLocation: index == 0),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Expenses'),
           BottomNavigationBarItem(

@@ -10,9 +10,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'item_repository_provider.g.dart';
 
 @riverpod
-ItemRepository itemRepository(Ref ref) {
+Future<ItemRepository> itemRepository(Ref ref) async {
   final mode = ref.watch(authStateProvider).asData?.value;
-  return mode == AuthMode.authenticated
-      ? RemoteItemRepo(dio: ref.watch(dioProvider))
-      : LocalItemRepo(db: ref.watch(databaseConnectionProvider).requireValue);
+  if (mode == AuthMode.authenticated) {
+    return RemoteItemRepo(dio: ref.watch(dioProvider));
+  }
+  final db = await ref.read(databaseConnectionProvider.future);
+  return LocalItemRepo(db: db);
 }

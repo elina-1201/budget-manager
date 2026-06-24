@@ -15,11 +15,13 @@ final categoryRepositoryProvider = CategoryRepositoryProvider._();
 final class CategoryRepositoryProvider
     extends
         $FunctionalProvider<
+          AsyncValue<CategoryRepository>,
           CategoryRepository,
-          CategoryRepository,
-          CategoryRepository
+          FutureOr<CategoryRepository>
         >
-    with $Provider<CategoryRepository> {
+    with
+        $FutureModifier<CategoryRepository>,
+        $FutureProvider<CategoryRepository> {
   CategoryRepositoryProvider._()
     : super(
         from: null,
@@ -36,23 +38,15 @@ final class CategoryRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<CategoryRepository> $createElement(
+  $FutureProviderElement<CategoryRepository> $createElement(
     $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  ) => $FutureProviderElement(pointer);
 
   @override
-  CategoryRepository create(Ref ref) {
+  FutureOr<CategoryRepository> create(Ref ref) {
     return categoryRepository(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(CategoryRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<CategoryRepository>(value),
-    );
   }
 }
 
 String _$categoryRepositoryHash() =>
-    r'63fd7b0343f36cc2bd6c7b37544c7d6be20a36e1';
+    r'26ff174fa869fc6fc305d3faac521091f6d12743';

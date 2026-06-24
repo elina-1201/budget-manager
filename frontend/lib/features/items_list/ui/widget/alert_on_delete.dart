@@ -1,5 +1,6 @@
 import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
+import 'package:budget_manager/shared/widget/text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,18 +14,15 @@ class AlertOnDelete extends ConsumerWidget {
       title: const Text("Confirm Deletion"),
       content: const Text("Are you sure you want to delete this item?"),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text("CANCEL"),
+        ModalTextButton(
+          onPress: () => Navigator.of(context).pop(false),
+          label: "CANCEL",
         ),
-        TextButton(
-          onPressed: () async {
+        ModalTextButton(
+          onPress: () async {
             await _deleteItem(item, context, ref);
           },
-          child: const Text(
-            "DELETE",
-            style: TextStyle(color: Color.fromARGB(255, 133, 27, 19)),
-          ),
+          label: "DELETE",
         ),
       ],
     );

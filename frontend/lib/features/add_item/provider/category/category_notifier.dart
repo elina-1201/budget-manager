@@ -8,23 +8,26 @@ part 'category_notifier.g.dart';
 class CategoryNotifier extends _$CategoryNotifier {
   @override
   Future<List<Category>> build() async {
-    return await _loadCategories();
+    final repo = await ref.read(categoryRepositoryProvider.future);
+    return repo.getCategories();
   }
 
-  Future<List<Category>> _loadCategories() async {
+  Future<List<Category>> addCategory({required String name}) async {
+    state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(categoryRepositoryProvider);
-      return await repo.getCategories();
+      final repo = await ref.read(categoryRepositoryProvider.future);
+      await repo.saveCategory(categoryName: name);
+      return repo.getCategories();
     });
     return state.value ?? [];
   }
 
-  void addCategory({required String name}) async {
+  Future<void> deleteCategory({required int id}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(categoryRepositoryProvider);
-      await repo.saveCategory(categoryName: name);
-      return await _loadCategories();
+      final repo = await ref.read(categoryRepositoryProvider.future);
+      await repo.deleteCategory(categoryId: id);
+      return repo.getCategories();
     });
   }
 }

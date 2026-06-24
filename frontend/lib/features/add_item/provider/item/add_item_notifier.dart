@@ -17,7 +17,7 @@ class AddItemNotifier extends _$AddItemNotifier {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(itemRepositoryProvider);
+      final repo = await ref.read(itemRepositoryProvider.future);
       await repo.saveItem(
         body: ItemRequestBody(
           name: name,
