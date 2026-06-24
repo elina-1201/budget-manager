@@ -1,3 +1,7 @@
+# manually added:
+.agents/
+skills-lock.json
+
 # Miscellaneous
 *.class
 *.log
