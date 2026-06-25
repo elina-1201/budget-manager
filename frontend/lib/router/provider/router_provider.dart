@@ -37,7 +37,8 @@ String? redirectLogic(
 
   if (path == '/splash') {
     if (hasAccess) {
-      return '/items';
+      return '/add_item';
+      //return '/items';
     } else {
       return '/login';
     }
@@ -47,7 +48,8 @@ String? redirectLogic(
   final isPublicPath = publicPaths.contains(state.matchedLocation);
 
   if (!hasAccess && !isPublicPath) return '/login';
-  if (hasAccess && isPublicPath) return '/items';
+  // if (hasAccess && isPublicPath) return '/items';
+  if (hasAccess && isPublicPath) return '/add_item';
 
   return null;
 }
