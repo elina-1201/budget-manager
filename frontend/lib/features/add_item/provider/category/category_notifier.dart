@@ -8,7 +8,7 @@ part 'category_notifier.g.dart';
 class CategoryNotifier extends _$CategoryNotifier {
   @override
   Future<List<Category>> build() async {
-    final repo = await ref.read(categoryRepositoryProvider.future);
+    final repo = await ref.watch(categoryRepositoryProvider.future);
     return repo.getCategories();
   }
 

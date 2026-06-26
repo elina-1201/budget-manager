@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CategoryRepo extends CrudRepository<Category, Long> {
      boolean existsByName(String name);
-     List<CategoryProjection> findAllByOwner(AppUser owner);
+     List<CategoryProjection> findAllByOwnerOrderByIdDesc(AppUser owner);
 }

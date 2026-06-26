@@ -1,6 +1,7 @@
 import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:budget_manager/features/items_list/provider/item_list_notifier.dart';
-import 'package:budget_manager/shared/widget/text_button.dart';
+import 'package:budget_manager/shared/widget/modal_button/button_type.dart';
+import 'package:budget_manager/shared/widget/modal_button/modal_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +18,7 @@ class AlertOnDelete extends ConsumerWidget {
         ModalTextButton(
           onPress: () => Navigator.of(context).pop(false),
           label: "CANCEL",
+          type: ButtonType.cancel,
         ),
         ModalTextButton(
           onPress: () async {
@@ -35,7 +37,7 @@ class AlertOnDelete extends ConsumerWidget {
   ) async {
     final notifier = ref.read(itemsListProvider.notifier);
     await notifier.deleteItem(item.id);
-    await ref.read(itemsListProvider.notifier).refresh();
+    ref.invalidate(itemsListProvider);
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

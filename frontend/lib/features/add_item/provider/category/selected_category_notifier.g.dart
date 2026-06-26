@@ -20,7 +20,7 @@ final class SelectedCategoryNotifierProvider
         argument: null,
         retry: null,
         name: r'selectedCategoryProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -42,7 +42,7 @@ final class SelectedCategoryNotifierProvider
 }
 
 String _$selectedCategoryNotifierHash() =>
-    r'3368c2d89d5ea6c57f7c96152636362225376740';
+    r'3deea35f4beebf6f138a7a7baaca67c1c5bbebb7';
 
 abstract class _$SelectedCategoryNotifier extends $Notifier<Category?> {
   Category? build();

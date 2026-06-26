@@ -20,8 +20,16 @@ List<RouteBase> routes = [
     branches: [
       StatefulShellBranch(
         routes: [
-          GoRoute(path: '/items', builder: (_, _) => const ItemsListScreen()),
-          GoRoute(path: '/add_item', builder: (_, _) => const AddItemScreen()),
+          GoRoute(
+            path: '/items',
+            builder: (_, _) => const ItemsListScreen(),
+            routes: [
+              GoRoute(
+                path: 'add_item',
+                builder: (_, _) => const AddItemScreen(),
+              ),
+            ],
+          ),
           GoRoute(
             path: '/item_details',
             builder: (_, state) {

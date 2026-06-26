@@ -1,6 +1,3 @@
-import 'package:budget_manager/core/services/auth/auth_mode_enum.dart';
-import 'package:budget_manager/core/services/auth/storage/provider/auth_state_provider.dart';
-import 'package:budget_manager/core/services/local_db/provider/local_db_provider.dart';
 import 'package:budget_manager/core/theme/app_theme.dart';
 import 'package:budget_manager/router/provider/router_provider.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +12,9 @@ class AppRoot extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    _initLocalDb(ref);
     return MaterialApp.router(
       routerConfig: ref.watch(goRouterProvider),
       theme: AppTheme.dark,
     );
-  }
-
-  void _initLocalDb(WidgetRef ref) {
-    final authState = ref.watch(authStateProvider);
-    final authMode = authState.asData?.value;
-    final notAuthenticated =
-        authMode == AuthMode.unauthenticated || authMode == AuthMode.guest;
-    if (notAuthenticated) {
-      ref.read(databaseConnectionProvider);
-    }
   }
 }

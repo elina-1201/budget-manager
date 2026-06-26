@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'selected_category_notifier.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class SelectedCategoryNotifier extends _$SelectedCategoryNotifier {
   @override
   Category? build() => null;

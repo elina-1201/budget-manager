@@ -20,12 +20,12 @@ class LocalCategoryRepo implements CategoryRepository {
   }
 
   @override
-  Future<int> saveCategory({required String categoryName}) async {
-    return await (db).insert(tableName, {'name': categoryName});
+  Future<void> saveCategory({required String categoryName}) async {
+    await (db).insert(tableName, {'name': categoryName});
   }
 
   @override
-  Future<int> deleteCategory({required int categoryId}) async {
-    return await db.delete(tableName, where: 'id = ?', whereArgs: [categoryId]);
+  Future<void> deleteCategory({required int categoryId}) async {
+    await db.delete(tableName, where: 'id = ?', whereArgs: [categoryId]);
   }
 }

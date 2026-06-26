@@ -2,7 +2,8 @@ import 'package:budget_manager/core/data/dto/category.dart';
 import 'package:budget_manager/features/add_item/provider/category/category_notifier.dart';
 import 'package:budget_manager/features/add_item/provider/category/selected_category_notifier.dart';
 import 'package:budget_manager/features/add_item/ui/widget/drop_down.dart';
-import 'package:budget_manager/shared/widget/text_button.dart';
+import 'package:budget_manager/shared/widget/modal_button/button_type.dart';
+import 'package:budget_manager/shared/widget/modal_button/modal_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,6 +52,7 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Add New Category'),
+          //TODO: clear the text field when the modal is closed
           content: TextField(
             autofocus: true,
             decoration: const InputDecoration(labelText: 'Category Name'),
@@ -62,6 +64,7 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
                 Navigator.of(context).pop();
               },
               label: 'Cancel',
+              type: ButtonType.cancel,
             ),
             OutlinedButton(
               onPressed: () async {

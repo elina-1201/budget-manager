@@ -19,7 +19,7 @@ class LocalItemRepo implements ItemRepository {
   }
 
   @override
-  Future<int> saveItem({required ItemRequestBody body}) async {
+  Future<void> saveItem({required ItemRequestBody body}) async {
     final rows = await db.query(
       'category',
       where: 'id = ?',
@@ -35,17 +35,17 @@ class LocalItemRepo implements ItemRepository {
       categoryName: category.name,
     );
 
-    return await db.insert(tableName, item.toMap());
+    await db.insert(tableName, item.toMap());
   }
 
   @override
-  Future<int> updateItem({required ItemRequestBody body}) {
+  Future<void> updateItem({required ItemRequestBody body}) async {
     // TODO: implement updateItem
     throw UnimplementedError();
   }
 
   @override
-  Future<int> deleteItem({required int itemId}) {
-    return db.delete(tableName, where: 'id = ?', whereArgs: [itemId]);
+  Future<void> deleteItem({required int itemId}) async {
+    await db.delete(tableName, where: 'id = ?', whereArgs: [itemId]);
   }
 }

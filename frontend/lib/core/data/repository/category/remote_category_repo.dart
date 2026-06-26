@@ -4,13 +4,11 @@ import 'package:dio/dio.dart';
 
 class RemoteCategoryRepo implements CategoryRepository {
   final Dio _dio;
-
   RemoteCategoryRepo({required this._dio});
 
   @override
   Future<List<Category>> getCategories() async {
     final response = await _dio.get('/category');
-
     return (response.data as List).map((e) => Category.fromMap(e)).toList();
   }
 

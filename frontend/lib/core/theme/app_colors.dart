@@ -24,5 +24,6 @@ abstract class AppColors {
   static const error = Color(0xFFCF6679);
   static const success = Color(0xFF7BBFA5);
 
+  static const backgroundDelete = Color(0xFF851B13);
   static const bluish = Color(0xFF7D8B8E);
 }

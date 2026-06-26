@@ -36,7 +36,7 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.push('/add_item');
+          context.push('/items/add_item');
         },
         child: const Icon(Icons.add),
       ),

@@ -32,6 +32,6 @@ public class CategoryService {
     public List<CategoryProjection> getCategories(Authentication auth) {
         AppUser owner = userService.requireUserByEmail(auth.getName());
 
-        return categoryRepo.findAllByOwner(owner);
+        return categoryRepo.findAllByOwnerOrderByIdDesc(owner);
     }
 }

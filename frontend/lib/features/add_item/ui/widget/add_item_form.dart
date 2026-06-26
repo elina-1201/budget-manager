@@ -91,10 +91,11 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
           .addItem(
             name: _name.text,
             description: _description.text,
+            //TODO: handle the case when the amount is not a valid double, add exception handling
             amount: double.tryParse(_amount.text) ?? 0.0,
             categoryId: ref.read(selectedCategoryProvider)?.id ?? 0,
           );
-      await ref.read(itemsListProvider.notifier).refresh();
+      ref.invalidate(itemsListProvider);
 
       ScaffoldMessenger.of(
         context,

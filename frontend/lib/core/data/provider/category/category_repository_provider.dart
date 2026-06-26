@@ -15,6 +15,6 @@ Future<CategoryRepository> categoryRepository(Ref ref) async {
   if (mode == AuthMode.authenticated) {
     return RemoteCategoryRepo(dio: ref.watch(dioProvider));
   }
-  final db = await ref.read(databaseConnectionProvider.future);
+  final db = await ref.watch(databaseConnectionProvider.future);
   return LocalCategoryRepo(db: db);
 }

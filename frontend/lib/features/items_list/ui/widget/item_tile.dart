@@ -1,4 +1,5 @@
 import 'package:budget_manager/core/data/dto/item.dart';
+import 'package:budget_manager/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,7 +28,7 @@ class DeleteBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(right: 20.0),
-      color: const Color.fromARGB(255, 133, 27, 19),
+      color: AppColors.backgroundDelete,
       alignment: Alignment.centerRight,
       child: Icon(Icons.delete_outlined, color: Colors.white),
     );
