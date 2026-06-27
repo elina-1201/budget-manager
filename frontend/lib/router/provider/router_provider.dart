@@ -15,6 +15,9 @@ GoRouter goRouter(Ref ref) {
     initialLocation: '/splash',
     routes: routes,
     redirect: (context, state) => redirectLogic(context, state, authState),
+    errorBuilder: (context, state) =>
+        //TODO: Implement a proper error screen
+        Scaffold(body: Center(child: Text('Page not found: ${state.uri}'))),
   );
 
   return router;

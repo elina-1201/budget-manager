@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//TODO: add a splash screen with the app logo
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 

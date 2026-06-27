@@ -29,4 +29,10 @@ class RemoteItemRepo implements ItemRepository {
   Future<void> deleteItem({required int itemId}) async {
     await _dio.delete('/item/$itemId');
   }
+
+  @override
+  Future<Item> getItem({required int itemId}) {
+    // TODO: implement getItem
+    throw UnimplementedError();
+  }
 }

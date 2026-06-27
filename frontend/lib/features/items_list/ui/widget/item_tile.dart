@@ -15,7 +15,7 @@ class ItemTile extends StatelessWidget {
       subtitle: Text(item.description),
       trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
       onTap: () {
-        context.push('/item_details', extra: item);
+        context.push('/item_details/${item.id}');
       },
     );
   }

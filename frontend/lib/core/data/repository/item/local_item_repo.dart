@@ -48,4 +48,17 @@ class LocalItemRepo implements ItemRepository {
   Future<void> deleteItem({required int itemId}) async {
     await db.delete(tableName, where: 'id = ?', whereArgs: [itemId]);
   }
+
+  @override
+  Future<Item> getItem({required int itemId}) async {
+    final rows = await db.query(
+      tableName,
+      where: 'id = ?',
+      whereArgs: [itemId],
+    );
+    if (rows.isEmpty) {
+      throw Exception('Item not found');
+    }
+    return Item.fromMap(rows.first);
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:budget_manager/core/data/dto/item.dart';
 import 'package:budget_manager/features/add_item/ui/add_item_screen.dart';
 import 'package:budget_manager/features/auth/login/ui/login_screen.dart';
 import 'package:budget_manager/features/auth/register/ui/register_screen.dart';
@@ -31,17 +30,25 @@ List<RouteBase> routes = [
             ],
           ),
           GoRoute(
-            path: '/item_details',
+            path: '/item_details/:itemId',
             builder: (_, state) {
-              Item item = state.extra as Item;
-              return ItemDetailsScreen(item: item);
+              final int id = _parseIntParam(state, 'itemId');
+              return ItemDetailsScreen(itemId: id);
             },
           ),
         ],
       ),
       StatefulShellBranch(
+        //TODO: Implement stats screen
         routes: [GoRoute(path: '/stats', builder: (_, _) => const Scaffold())],
       ),
     ],
   ),
 ];
+
+int _parseIntParam(GoRouterState state, String key) {
+  final raw = state.pathParameters[key];
+  final parsed = raw != null ? int.tryParse(raw) : null;
+  if (parsed == null) throw FormatException('Invalid parameter: $key');
+  return parsed;
+}
