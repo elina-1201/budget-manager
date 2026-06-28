@@ -2,7 +2,7 @@
 .agents/
 skills-lock.json
 #generated files
-# *.g.dart
+*.g.dart
 
 # Miscellaneous
 *.class
