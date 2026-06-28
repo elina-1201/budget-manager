@@ -12,7 +12,9 @@ class ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(item.name),
-      subtitle: Text(item.description),
+      subtitle: (item.description != null && item.description!.isNotEmpty)
+          ? Text(item.description!)
+          : null,
       trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
       onTap: () {
         context.push('/item_details/${item.id}');

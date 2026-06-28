@@ -36,14 +36,14 @@ class AlertOnDelete extends ConsumerWidget {
     WidgetRef ref,
   ) async {
     final notifier = ref.read(itemsListProvider.notifier);
-    await notifier.deleteItem(item.id);
+    await notifier.deleteItem(item.id!);
     ref.invalidate(itemsListProvider);
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('"${item.name}" deleted successfully')),
       );
+      Navigator.of(context).pop(true);
     }
-    Navigator.of(context).pop(true);
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:budget_manager/features/auth/login/data/dto/login_response_body.dart';
+import 'package:budget_manager/features/auth/login/data/dto/auth_response_body.dart';
 import 'package:budget_manager/features/auth/register/data/dto/register_request_body.dart';
 import 'package:dio/dio.dart';
 

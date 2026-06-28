@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
+import '../dto/auth_response_body.dart';
 import '../dto/login_request_body.dart';
-import '../dto/login_response_body.dart';
 
 class LoginRepository {
   final Dio _dio;

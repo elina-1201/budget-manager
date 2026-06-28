@@ -10,7 +10,7 @@ class LocalCategoryRepo implements CategoryRepository {
 
   @override
   Future<List<Category>> getCategories() async {
-    List<Map<String, dynamic>> maps = await (db).query(
+    List<Map<String, dynamic>> maps = await db.query(
       tableName,
       orderBy: 'id DESC',
     );
@@ -21,7 +21,7 @@ class LocalCategoryRepo implements CategoryRepository {
 
   @override
   Future<void> saveCategory({required String categoryName}) async {
-    await (db).insert(tableName, {'name': categoryName});
+    await db.insert(tableName, {'name': categoryName});
   }
 
   @override

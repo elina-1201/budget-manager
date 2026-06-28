@@ -1,6 +1,5 @@
 import 'package:budget_manager/core/data/dto/category.dart';
 import 'package:budget_manager/core/data/dto/item.dart';
-import 'package:budget_manager/core/data/dto/item_local_model.dart';
 import 'package:budget_manager/core/data/repository/item/item_repository_i.dart';
 import 'package:budget_manager/features/add_item/data/dto/item_request_body.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,12 +27,18 @@ class LocalItemRepo implements ItemRepository {
 
     final Category category = rows.map((row) => Category.fromMap(row)).first;
 
-    ItemLocalModel item = ItemLocalModel(
+    Item item = Item(
       name: body.name,
       description: body.description,
       amount: body.amount,
-      categoryName: category.name,
+      category: category.name,
     );
+    // ItemLocalModel item = ItemLocalModel(
+    //   name: body.name,
+    //   description: body.description,
+    //   amount: body.amount,
+    //   categoryName: category.name,
+    // );
 
     await db.insert(tableName, item.toMap());
   }

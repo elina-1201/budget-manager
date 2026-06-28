@@ -1,14 +1,14 @@
 class Item {
-  final int id;
+  final int? id;
   final String name;
-  final String description;
+  final String? description;
   final double amount;
   final String category;
 
   Item({
-    required this.id,
+    this.id,
     required this.name,
-    required this.description,
+    this.description,
     required this.amount,
     required this.category,
   });
@@ -21,5 +21,14 @@ class Item {
       amount: map['amount'].toDouble(),
       category: map['category'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'description': description,
+      'amount': amount,
+      'category': category,
+    };
   }
 }
