@@ -1,10 +1,9 @@
 import 'package:budget_manager/core/services/auth/auth_mode_enum.dart';
 import 'package:budget_manager/core/services/auth/storage/provider/auth_storage_provider.dart';
-import 'package:budget_manager/core/services/dio/dio_provider.dart';
 import 'package:budget_manager/core/services/shared_prefs/provider/shared_prefs_provider.dart';
+import 'package:budget_manager/core/services/token_refresh/provider/token_refresh_provider.dart';
 import 'package:budget_manager/features/add_item/provider/category/category_notifier.dart';
 import 'package:budget_manager/features/add_item/provider/category/selected_category_notifier.dart';
-import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -34,30 +33,7 @@ class AuthState extends _$AuthState {
     if (token == null) return false;
     if (!JwtDecoder.isExpired(token)) return true;
 
-    final refreshToken = await storage.getRefreshToken();
-    if (refreshToken == null) {
-      await storage.deleteTokens();
-      return false;
-    }
-
-    try {
-      final baseUrl = ref.read(dioProvider).options.baseUrl;
-      final refreshDio = Dio(BaseOptions(baseUrl: baseUrl));
-      final response = await refreshDio.post(
-        '/auth/refresh',
-        data: {'refresh_token': refreshToken},
-      );
-
-      await storage.saveTokens(
-        accessToken: response.data['access_token'],
-        refreshToken: response.data['refresh_token'],
-      );
-
-      return true;
-    } on DioException {
-      await storage.deleteTokens();
-      return false;
-    }
+    return ref.read(tokenRefreshProvider).refreshToken();
   }
 
   Future<void> storeTokensOnAuth(

@@ -1,11 +1,13 @@
 import 'package:budget_manager/core/services/auth/storage/auth_storage.dart';
+import 'package:budget_manager/core/services/token_refresh/token_refresh.dart';
 import 'package:dio/dio.dart';
 
 class AuthInterceptor extends Interceptor {
   final AuthStorage _authStorage;
+  final TokenRefreshService _tokenRefreshService;
   final Dio _dio;
 
-  AuthInterceptor(this._authStorage, this._dio);
+  AuthInterceptor(this._authStorage, this._tokenRefreshService, this._dio);
 
   @override
   void onRequest(
@@ -21,39 +23,20 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
-      final refreshToken = await _authStorage.getRefreshToken();
-
-      if (refreshToken == null) {
-        await _authStorage.deleteTokens();
-        handler.next(err);
-        return;
-      }
-
-      try {
-        // Use a separate Dio instance to avoid interceptor loop
-        final refreshDio = Dio(BaseOptions(baseUrl: _dio.options.baseUrl));
-        final response = await refreshDio.post(
-          '/auth/refresh',
-          data: {'refresh_token': refreshToken},
-        );
-
-        await _authStorage.saveTokens(
-          accessToken: response.data['access_token'],
-          refreshToken: response.data['refresh_token'],
-        );
-
-        // Retry original request
-        final opts = err.requestOptions;
-        opts.headers['Authorization'] =
-            'Bearer ${response.data['access_token']}';
-        handler.resolve(await _dio.fetch(opts));
-      } catch (_) {
-        await _authStorage.deleteTokens();
-        handler.next(err);
-      }
+    if (err.response?.statusCode != 401) {
+      handler.next(err);
       return;
     }
-    handler.next(err);
+
+    final refreshed = await _tokenRefreshService.refreshToken();
+    if (!refreshed) {
+      handler.next(err);
+      return;
+    }
+
+    final newToken = await _authStorage.getAccessToken();
+    final options = err.requestOptions;
+    options.headers['Authorization'] = 'Bearer $newToken';
+    handler.resolve(await _dio.fetch(options));
   }
 }
