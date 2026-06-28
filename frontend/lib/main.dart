@@ -1,5 +1,5 @@
 import 'package:budget_manager/core/theme/app_theme.dart';
-import 'package:budget_manager/router/provider/router_provider.dart';
+import 'package:budget_manager/router/router_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

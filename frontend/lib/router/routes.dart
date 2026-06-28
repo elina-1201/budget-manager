@@ -1,9 +1,9 @@
-import 'package:budget_manager/features/add_item/ui/add_item_screen.dart';
-import 'package:budget_manager/features/auth/login/ui/login_screen.dart';
-import 'package:budget_manager/features/auth/register/ui/register_screen.dart';
-import 'package:budget_manager/features/item_details/item_details_screen.dart';
-import 'package:budget_manager/features/items_list/ui/items_list_screen.dart';
-import 'package:budget_manager/shared/app_shell/app_shell.dart';
+import 'package:budget_manager/features/auth/ui/login_screen.dart';
+import 'package:budget_manager/features/auth/ui/register_screen.dart';
+import 'package:budget_manager/features/expenses/add/ui/add_item_screen.dart';
+import 'package:budget_manager/features/expenses/details/ui/item_details_screen.dart';
+import 'package:budget_manager/features/expenses/list/ui/items_list_screen.dart';
+import 'package:budget_manager/router/app_shell.dart';
 import 'package:budget_manager/shared/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
