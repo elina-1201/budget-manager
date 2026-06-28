@@ -1,6 +1,8 @@
 # manually added:
 .agents/
 skills-lock.json
+#generated files
+# *.g.dart
 
 # Miscellaneous
 *.class
