@@ -12,7 +12,7 @@ class ItemRepositoryLocal implements ItemRepository {
 
   @override
   Future<List<Item>> getItems() async {
-    final rows = await db.query(tableName, orderBy: 'id DESC');
+    final rows = await db.query(tableName, orderBy: 'date DESC');
     if (rows.isEmpty) return [];
     return rows.map((row) => Item.fromMap(row)).toList();
   }
@@ -26,19 +26,15 @@ class ItemRepositoryLocal implements ItemRepository {
     );
 
     final Category category = rows.map((row) => Category.fromMap(row)).first;
+    final int dateInMillis = body.date.millisecondsSinceEpoch;
 
     Item item = Item(
       name: body.name,
       description: body.description,
       amount: body.amount,
       category: category.name,
+      date: dateInMillis,
     );
-    // ItemLocalModel item = ItemLocalModel(
-    //   name: body.name,
-    //   description: body.description,
-    //   amount: body.amount,
-    //   categoryName: category.name,
-    // );
 
     await db.insert(tableName, item.toMap());
   }

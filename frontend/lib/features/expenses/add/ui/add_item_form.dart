@@ -2,6 +2,7 @@ import 'package:budget_manager/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/features/expenses/add/providers/add_item_notifier.dart';
 import 'package:budget_manager/features/expenses/add/providers/selected_category_notifier.dart';
 import 'package:budget_manager/features/expenses/add/ui/category_drop_down.dart';
+import 'package:budget_manager/features/expenses/add/ui/date_picker.dart';
 import 'package:budget_manager/features/expenses/list/providers/item_list_notifier.dart';
 import 'package:budget_manager/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
   late final TextEditingController _name;
   late final TextEditingController _description;
   late final TextEditingController _amount;
+  late final TextEditingController _dateController;
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     _name = TextEditingController();
     _description = TextEditingController();
     _amount = TextEditingController();
+    _dateController = TextEditingController();
   }
 
   @override
@@ -34,6 +37,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     _name.dispose();
     _description.dispose();
     _amount.dispose();
+    _dateController.dispose();
     super.dispose();
   }
 
@@ -54,15 +58,15 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     });
 
     return SafeArea(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16.0, 44.0, 16.0, 0.0),
         child: Form(
           key: _formKey,
           child: Column(
-            spacing: 16.0,
+            spacing: 14.0,
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Item Name'),
+                decoration: InputDecoration(labelText: 'Name'),
                 controller: _name,
                 validator: Validator.required(),
               ),
@@ -77,7 +81,9 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
                 validator: Validator.positiveNumber(),
               ),
               CategoryDropDown(),
+              DatePicker(controller: _dateController),
               SizedBox(height: 16.0),
+
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -101,14 +107,7 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
 
   void _addNewItem() {
     final amountText = _amount.text.replaceAll(',', '.');
-    final amount = double.tryParse(amountText);
-
-    if (amount == null || amount <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid positive amount')),
-      );
-      return;
-    }
+    final amount = double.parse(amountText);
 
     final categoryId = ref.read(selectedCategoryProvider)?.id;
     if (categoryId == null) {
@@ -125,6 +124,9 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
           description: _description.text,
           amount: amount,
           categoryId: categoryId,
+          date: DateTime.parse(
+            _dateController.text.split('.').reversed.join('-'),
+          ),
         );
   }
 

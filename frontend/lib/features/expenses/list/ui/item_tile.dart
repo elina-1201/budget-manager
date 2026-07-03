@@ -11,6 +11,12 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: Text(
+        DateTime.fromMillisecondsSinceEpoch(
+          item.date ?? 0,
+        ).day.toString().padLeft(2, '0'),
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
       title: Text(item.name),
       subtitle: (item.description != null && item.description!.isNotEmpty)
           ? Text(item.description!)

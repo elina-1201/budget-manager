@@ -99,6 +99,7 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
     }
   }
 
+  //TODO: check same name category exists before adding
   Future<void> _addCategory(BuildContext dialogContext) async {
     final categoryName = _categoryName.text.trim();
     if (categoryName.isEmpty) return;

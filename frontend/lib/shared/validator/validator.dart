@@ -20,7 +20,8 @@ abstract final class Validator {
   }) => (value) {
     String validNumMessage = 'Enter a valid number';
     if (!_isBlank(value)) {
-      final number = num.tryParse(value!);
+      final amountText = value!.replaceAll(',', '.');
+      final number = num.tryParse(amountText);
       if (number == null) return validNumMessage;
       return number <= 0 ? message : null;
     }
@@ -34,11 +35,6 @@ abstract final class Validator {
     }
     return null;
   };
-
-  static String? Function(T?) requiredSelection<T>({
-    String message = 'Select an option',
-  }) =>
-      (value) => value == null ? message : null;
 
   static bool _isBlank(String? value) => value == null || value.trim().isEmpty;
 }

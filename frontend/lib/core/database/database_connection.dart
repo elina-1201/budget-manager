@@ -43,7 +43,8 @@ class DatabaseConnection {
         name $textType,
         amount $realType,
         category $textType,
-        description TEXT
+        description TEXT,
+        date INTEGER NOT NULL
       )
     ''');
   }

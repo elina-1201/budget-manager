@@ -4,6 +4,7 @@ class Item {
   final String? description;
   final double amount;
   final String category;
+  final int? date;
 
   Item({
     this.id,
@@ -11,6 +12,7 @@ class Item {
     this.description,
     required this.amount,
     required this.category,
+    this.date,
   });
 
   factory Item.fromMap(Map<String, dynamic> map) {
@@ -20,6 +22,7 @@ class Item {
       description: map['description'],
       amount: map['amount'].toDouble(),
       category: map['category'],
+      date: map['date'],
     );
   }
 
@@ -29,6 +32,7 @@ class Item {
       'description': description,
       'amount': amount,
       'category': category,
+      'date': date,
     };
   }
 }

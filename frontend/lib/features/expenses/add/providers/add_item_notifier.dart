@@ -14,6 +14,7 @@ class AddItemNotifier extends _$AddItemNotifier {
     required String description,
     required double amount,
     required int categoryId,
+    required DateTime date,
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -24,6 +25,7 @@ class AddItemNotifier extends _$AddItemNotifier {
           description: description,
           amount: amount,
           categoryId: categoryId,
+          date: date,
         ),
       );
     });
