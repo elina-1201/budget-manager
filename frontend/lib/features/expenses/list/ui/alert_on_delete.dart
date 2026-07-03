@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/data/models/item.dart';
 import 'package:budget_manager/features/expenses/list/providers/item_list_notifier.dart';
 import 'package:budget_manager/shared/widgets/modal/button_type.dart';
@@ -25,6 +26,7 @@ class AlertOnDelete extends ConsumerWidget {
             await _deleteItem(item, context, ref);
           },
           label: "DELETE",
+          type: ButtonType.delete,
         ),
       ],
     );
@@ -37,13 +39,20 @@ class AlertOnDelete extends ConsumerWidget {
   ) async {
     final notifier = ref.read(itemsListProvider.notifier);
     await notifier.deleteItem(item.id!);
-    ref.invalidate(itemsListProvider);
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('"${item.name}" deleted successfully')),
-      );
-      Navigator.of(context).pop(true);
+      final currentState = ref.read(itemsListProvider);
+      if (currentState.hasError) {
+        final msg = const ErrorMapper().map(currentState.error!).message;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(msg)));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('"${item.name}" deleted successfully')),
+        );
+      }
+      Navigator.of(context).pop(!currentState.hasError);
     }
   }
 }

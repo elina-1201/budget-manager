@@ -12,14 +12,13 @@ class CategoryNotifier extends _$CategoryNotifier {
     return repo.getCategories();
   }
 
-  Future<List<Category>> addCategory({required String name}) async {
+  Future<void> addCategory({required String name}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final repo = await ref.read(categoryRepositoryProvider.future);
       await repo.saveCategory(categoryName: name);
       return repo.getCategories();
     });
-    return state.value ?? [];
   }
 
   Future<void> deleteCategory({required int id}) async {

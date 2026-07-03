@@ -34,9 +34,15 @@ class AuthInterceptor extends Interceptor {
       return;
     }
 
-    final newToken = await _authStorage.getAccessToken();
-    final options = err.requestOptions;
-    options.headers['Authorization'] = 'Bearer $newToken';
-    handler.resolve(await _dio.fetch(options));
+    try {
+      final newToken = await _authStorage.getAccessToken();
+      final options = err.requestOptions;
+      options.headers['Authorization'] = 'Bearer $newToken';
+      handler.resolve(await _dio.fetch(options));
+    } catch (retryError) {
+      // If the retried request also fails, pass the original 401 error
+      // through the chain so ErrorMappingInterceptor can handle it.
+      handler.next(err);
+    }
   }
 }

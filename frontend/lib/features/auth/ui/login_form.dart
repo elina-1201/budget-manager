@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/core/storage/auth_state_provider.dart';
 import 'package:budget_manager/features/auth/providers/login_notifier.dart';
 import 'package:budget_manager/shared/widgets/auth_fields/auth_fields.dart';
@@ -32,7 +33,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    _listenToLoginErrors(context);
+    ref.listenAsyncError(loginProvider, context: context);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -64,15 +65,5 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         ),
       ),
     );
-  }
-
-  void _listenToLoginErrors(BuildContext context) {
-    ref.listen<AsyncValue<void>>(loginProvider, (_, state) {
-      state.whenOrNull(
-        error: (error, _) => ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.toString()))),
-      );
-    });
   }
 }

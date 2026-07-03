@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/data/models/category.dart';
 import 'package:budget_manager/features/expenses/add/providers/category_notifier.dart';
 import 'package:budget_manager/features/expenses/add/providers/selected_category_notifier.dart';
@@ -31,6 +32,19 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    // Listen for category operation errors globally
+    ref.listen<AsyncValue<List<Category>>>(categoryProvider, (_, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(const ErrorMapper().map(error).message)),
+            );
+          }
+        },
+      );
+    });
+
     return GenericDropDown<Category>(
       list: ref.watch(categoryProvider),
       selected: ref.watch(selectedCategoryProvider),
@@ -49,10 +63,9 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
   void _openAddCategoryModal() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Add New Category'),
-          //TODO: clear the text field when the modal is closed
           content: TextField(
             autofocus: true,
             decoration: const InputDecoration(labelText: 'Category Name'),
@@ -61,22 +74,21 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
           actions: [
             ModalTextButton(
               onPress: () {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
               },
               label: 'Cancel',
               type: ButtonType.cancel,
             ),
             OutlinedButton(
               onPressed: () async {
-                await _addCategory();
-                Navigator.of(context).pop();
+                await _addCategory(dialogContext);
               },
-              child: Text("Add"),
+              child: const Text("Add"),
             ),
           ],
         );
       },
-    );
+    ).whenComplete(() => _categoryName.clear());
   }
 
   Future<void> _deleteCategory(Category category) async {
@@ -87,18 +99,19 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
     }
   }
 
-  //TODO: add validation for duplicate category names
-  Future<void> _addCategory() async {
-    {
-      final categoryName = _categoryName.text;
-      if (categoryName.isNotEmpty) {
-        Category newCategory = await ref
-            .read(categoryProvider.notifier)
-            .addCategory(name: categoryName)
-            .then((categories) => categories.first);
+  Future<void> _addCategory(BuildContext dialogContext) async {
+    final categoryName = _categoryName.text.trim();
+    if (categoryName.isEmpty) return;
 
-        ref.read(selectedCategoryProvider.notifier).select(newCategory);
-        _categoryName.clear();
+    await ref.read(categoryProvider.notifier).addCategory(name: categoryName);
+
+    // Only close the dialog and select the category if the operation succeeded
+    final currentState = ref.read(categoryProvider);
+    if (!currentState.hasError && currentState.hasValue) {
+      final categories = currentState.value!;
+      if (categories.isNotEmpty && dialogContext.mounted) {
+        ref.read(selectedCategoryProvider.notifier).select(categories.first);
+        Navigator.of(dialogContext).pop();
       }
     }
   }

@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/features/expenses/add/providers/add_item_notifier.dart';
 import 'package:budget_manager/features/expenses/add/providers/selected_category_notifier.dart';
 import 'package:budget_manager/features/expenses/add/ui/category_drop_down.dart';
@@ -39,6 +40,18 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
   @override
   Widget build(BuildContext context) {
     final addItemState = ref.watch(addItemProvider);
+    ref.listenAsyncError(addItemProvider, context: context);
+    ref.listen<AsyncValue<void>>(addItemProvider, (_, next) {
+      next.whenOrNull(
+        data: (_) {
+          ref.invalidate(itemsListProvider);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Added successfully')));
+          _clearFormFields();
+        },
+      );
+    });
 
     return SafeArea(
       child: Padding(
@@ -68,14 +81,16 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    _addNewItem(ref, addItemState);
+                    _addNewItem();
                   }
                 },
-                child: addItemState.when(
-                  data: (data) => const Text('Add'),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                  loading: () => const CircularProgressIndicator(),
-                ),
+                child: addItemState.isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Add'),
               ),
             ],
           ),
@@ -84,27 +99,36 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     );
   }
 
-  void _addNewItem(WidgetRef ref, AsyncValue addItemState) async {
-    try {
-      await ref
-          .read(addItemProvider.notifier)
-          .addItem(
-            name: _name.text,
-            description: _description.text,
-            //TODO: handle the case when the amount is not a valid double, add exception handling
-            amount: double.tryParse(_amount.text) ?? 0.0,
-            categoryId: ref.read(selectedCategoryProvider)?.id ?? 0,
-          );
-      ref.invalidate(itemsListProvider);
+  void _addNewItem() {
+    final amountText = _amount.text.replaceAll(',', '.');
+    final amount = double.tryParse(amountText);
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Added successfully')));
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to add item: $e')));
+    if (amount == null || amount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid positive amount')),
+      );
+      return;
     }
+
+    final categoryId = ref.read(selectedCategoryProvider)?.id;
+    if (categoryId == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a category')));
+      return;
+    }
+
+    ref
+        .read(addItemProvider.notifier)
+        .addItem(
+          name: _name.text,
+          description: _description.text,
+          amount: amount,
+          categoryId: categoryId,
+        );
+  }
+
+  void _clearFormFields() {
     _name.clear();
     _description.clear();
     _amount.clear();

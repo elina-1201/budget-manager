@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:budget_manager/core/storage/auth_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class TokenRefreshService {
   final AuthStorage _authStorage;
@@ -41,6 +42,9 @@ class TokenRefreshService {
       _refreshLock!.complete(true);
       return true;
     } catch (e) {
+      if (kDebugMode) {
+        debugPrint('🔴 Token refresh failed: $e');
+      }
       await _authStorage.deleteTokens();
       _refreshLock!.complete(false);
       return false;

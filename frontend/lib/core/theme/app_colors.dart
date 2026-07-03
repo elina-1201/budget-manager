@@ -22,6 +22,7 @@ abstract class AppColors {
   // ── Utility ────────────────────────────────────────────────────────────────
   static const divider = Color(0xFF454A60);
   static const error = Color(0xFFCF6679);
+  static const errorTrans = Color.fromARGB(171, 207, 102, 121);
   static const success = Color(0xFF7BBFA5);
 
   static const backgroundDelete = Color(0xFF851B13);

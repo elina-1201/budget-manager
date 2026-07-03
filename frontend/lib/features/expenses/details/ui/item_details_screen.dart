@@ -1,3 +1,4 @@
+import 'package:budget_manager/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/features/expenses/details/providers/item_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,10 @@ class ItemDetailsScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Item Details')),
       body: itemAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) {
+          final msg = const ErrorMapper().map(error).message;
+          return Center(child: Text(msg));
+        },
         data: (item) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

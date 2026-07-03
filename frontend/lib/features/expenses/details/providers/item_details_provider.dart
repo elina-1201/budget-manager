@@ -6,6 +6,6 @@ part 'item_details_provider.g.dart';
 
 @riverpod
 Future<Item> itemDetails(Ref ref, int itemId) async {
-  final repository = ref.read(itemRepositoryProvider).requireValue;
-  return await repository.getItem(itemId: itemId);
+  final repository = await ref.watch(itemRepositoryProvider.future);
+  return repository.getItem(itemId: itemId);
 }

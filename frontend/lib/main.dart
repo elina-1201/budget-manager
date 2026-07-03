@@ -1,10 +1,13 @@
+import 'package:budget_manager/core/exceptions/app_provider_observer.dart';
 import 'package:budget_manager/core/theme/app_theme.dart';
 import 'package:budget_manager/router/router_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(ProviderScope(child: const AppRoot()));
+  runApp(
+    ProviderScope(observers: [AppProviderObserver()], child: const AppRoot()),
+  );
 }
 
 class AppRoot extends ConsumerWidget {

@@ -12,16 +12,12 @@ class ItemsListNotifier extends _$ItemsListNotifier {
     return repository.getItems();
   }
 
-  // Future<void> refresh() async {
-  //   state = const AsyncValue.loading();
-  //   state = await AsyncValue.guard(() async {
-  //     final repository = await ref.read(itemRepositoryProvider.future);
-  //     return repository.getItems();
-  //   });
-  // }
-
   Future<void> deleteItem(int itemId) async {
-    final repository = await ref.read(itemRepositoryProvider.future);
-    await repository.deleteItem(itemId: itemId);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repository = await ref.read(itemRepositoryProvider.future);
+      await repository.deleteItem(itemId: itemId);
+      return repository.getItems(); // refresh the list
+    });
   }
 }

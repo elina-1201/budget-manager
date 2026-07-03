@@ -1,3 +1,5 @@
+import 'package:budget_manager/core/exceptions/async_error_listener.dart';
+import 'package:budget_manager/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/core/storage/auth_state_provider.dart';
 import 'package:budget_manager/features/expenses/list/providers/item_list_notifier.dart';
 import 'package:budget_manager/features/expenses/list/ui/items_list.dart';
@@ -16,6 +18,7 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
   @override
   Widget build(BuildContext context) {
     final itemsAsync = ref.watch(itemsListProvider);
+    ref.listenAsyncError(itemsListProvider, context: context);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +32,10 @@ class _ItemsListScreenState extends ConsumerState<ItemsListScreen> {
       ),
       body: itemsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) {
+          final msg = const ErrorMapper().map(error).message;
+          return Center(child: Text(msg));
+        },
         data: (items) => items.isEmpty
             ? const Center(child: Text('No items yet, try adding some!'))
             : ItemsList(items: items),

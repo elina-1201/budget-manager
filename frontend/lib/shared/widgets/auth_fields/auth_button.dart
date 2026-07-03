@@ -27,16 +27,6 @@ class _AuthButtonState extends State<AuthButton> {
 
     try {
       await widget.onPressed();
-    } catch (error) {
-      // Only show snackbar if widget is still in the tree
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${widget.buttonText} failed: $error'),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
     } finally {
       // Only reset loading state if widget is still in the tree
       if (mounted) {
