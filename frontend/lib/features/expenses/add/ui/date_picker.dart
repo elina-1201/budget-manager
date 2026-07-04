@@ -30,6 +30,8 @@ class DatePicker extends ConsumerWidget {
   Future<void> _selectDate(BuildContext context, WidgetRef ref) async {
     DateTime? selectedDate = ref.read(selectedDateProvider);
     final DateTime? picked = await showDatePicker(
+      //TODO: Change locale to device locale
+      locale: const Locale('en', 'GB'),
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
