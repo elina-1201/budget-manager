@@ -16,18 +16,18 @@ A full-stack personal & group expense tracking application built with **Flutter*
 
 ### Implemented
 - **User Authentication**: Register and login with JWT-based authentication (access + refresh tokens).
-- **Expense CRUD**: Create, view, delete expense items with name, description, amount, and category.
+- **Expense CRUD**: Create, view, delete expenses with name, description, amount, and category.
 - **Custom Categories**: Create and manage personalized spending categories.
-- **User Groups**: Create groups and share expenses among members.
-- **Invitations**: Invite other users to join a group in app.
+- **Offline-First Mode**: Local SQLite database (sqflite) with seamless online sync when connectivity is available.
 - **REST API with OpenAPI docs**: Fully documented API endpoints via Swagger UI.
 - **PostgreSQL + H2**: PostgreSQL in production, H2 in-memory database for local dev fallback.
 
 ### In Progress / Planned
 - **Statistics Dashboard**: Pie chart breakdown of spending by category.
 - **Spending Trends**: Monthly spending trend visualization over time.
-- **Offline-First Mode**: Local SQLite database (sqflite) with seamless online sync when connectivity is available.
-- **Edit & Update Items**: Backend endpoint and frontend UI for modifying existing expenses.
+- **Edit & Update Expenses**: Backend endpoint and frontend UI for modifying existing expenses.
+- **User Groups**: Create groups and share expenses among members.
+- **Invitations**: Invite other users to join a group in app.
 - **UI/UX**: Material Design UI with bottom navigation tabs, swipe gestures, and responsive forms.
 
 ---
@@ -85,7 +85,7 @@ cd backend
 
 # Or run with PostgreSQL via Docker
 docker compose up -d
-DB_URL=jdbc:postgresql://localhost:5432/budget ./gradlew bootRun
+./start
 ```
 
 API will be available at `http://localhost:8080`.  
@@ -96,6 +96,7 @@ Swagger UI at `http://localhost:8080/swagger-ui/index.html`.
 ```bash
 cd frontend
 flutter pub get
+dart run build_runner build
 flutter run
 ```
 
@@ -108,8 +109,8 @@ flutter run
 | POST | `/auth/register` | Register new user | No |
 | POST | `/auth/token` | Login (get JWT) | Basic |
 | POST | `/auth/refresh` | Refresh JWT token | No |
-| GET/POST | `/item` | List / Create expenses | JWT |
-| DELETE | `/item/{id}` | Delete an expense | JWT |
+| GET/POST | `/expense` | List / Create expenses | JWT |
+| DELETE | `/expense/{id}` | Delete an expense | JWT |
 | GET/POST | `/category` | List / Create categories | JWT |
 | GET/POST | `/group` | List / Create groups | JWT |
 | POST | `/invitation` | Send group invitation | JWT |

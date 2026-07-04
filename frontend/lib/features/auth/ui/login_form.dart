@@ -47,7 +47,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
             AuthButton(
               buttonText: 'Login',
-              // onPressed: () async => debugPrint(ref.read(apiBaseUrlProvider)),
               onPressed: () => ref
                   .read(loginProvider.notifier)
                   .login(email: _email.text, password: _password.text),
