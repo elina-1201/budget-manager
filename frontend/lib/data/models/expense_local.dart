@@ -1,22 +1,22 @@
-class Item {
+class ExpenseLocal {
   final int? id;
   final String name;
   final String? description;
   final double amount;
   final String category;
-  final int? date;
+  final int date;
 
-  Item({
+  ExpenseLocal({
     this.id,
     required this.name,
     this.description,
     required this.amount,
     required this.category,
-    this.date,
+    required this.date,
   });
 
-  factory Item.fromMap(Map<String, dynamic> map) {
-    return Item(
+  factory ExpenseLocal.fromMap(Map<String, dynamic> map) {
+    return ExpenseLocal(
       id: map['id'],
       name: map['name'],
       description: map['description'],

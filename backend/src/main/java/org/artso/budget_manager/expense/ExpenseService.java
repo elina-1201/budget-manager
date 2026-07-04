@@ -1,12 +1,12 @@
-package org.artso.budget_manager.item;
+package org.artso.budget_manager.expense;
 
 import lombok.AllArgsConstructor;
-import org.artso.budget_manager.item.dto.ItemDto;
-import org.artso.budget_manager.item.dto.ItemRequest;
+import org.artso.budget_manager.expense.dto.ExpenseDto;
+import org.artso.budget_manager.expense.dto.ExpenseRequest;
 import org.artso.budget_manager.auth.AppUser;
 import org.artso.budget_manager.category.Category;
 import org.artso.budget_manager.group.UserGroup;
-import org.artso.budget_manager.item.mapper.RequestItemToEntityMapper;
+import org.artso.budget_manager.expense.mapper.RequestToExpenseMapper;
 import org.artso.budget_manager.auth.AppUserService;
 import org.artso.budget_manager.category.CategoryRepo;
 import org.artso.budget_manager.group.GroupRepo;
@@ -23,16 +23,16 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class ItemService {
-    private final ItemRepo itemRepo;
+public class ExpenseService {
+    private final ExpenseRepo expenseRepo;
     private final AppUserService userService;
     private final GroupRepo groupRepo;
     private final CategoryRepo categoryRepo;
-    private final RequestItemToEntityMapper requestToEntityMapper;
+    private final RequestToExpenseMapper requestToEntityMapper;
 
-    @PreAuthorize("@itemAuth.canCreate(authentication, #request)")
+    @PreAuthorize("@expenseAuth.canCreate(authentication, #request)")
     @Transactional
-    public ItemDto createItem(ItemRequest request, Authentication auth) {
+    public ExpenseDto createExpense(ExpenseRequest request, Authentication auth) {
         Set<UserGroup> sharedGroups;
 
         AppUser author = userService.requireUserByEmail(auth.getName());
@@ -45,39 +45,39 @@ public class ItemService {
         } else {
             sharedGroups = (Set<UserGroup>) groupRepo.findAllById(request.sharedGroupIds());
         }
-        Item item = new Item();
-        requestToEntityMapper.mapFromRequestToEntity(request, item);
-        item.setAuthor(author);
-        item.setCategory(category.getName());
-        item.setSharedGroups(sharedGroups);
+        Expense expense = new Expense();
+        requestToEntityMapper.mapFromRequestToEntity(request, expense);
+        expense.setAuthor(author);
+        expense.setCategory(category.getName());
+        expense.setSharedGroups(sharedGroups);
 
-        itemRepo.save(item);
-        return ItemDto.toDto(item);
+        expenseRepo.save(expense);
+        return ExpenseDto.toDto(expense);
     }
 
-    public List<ItemDto> getAllItems(Authentication auth) {
+    public List<ExpenseDto> getAllExpenses(Authentication auth) {
         AppUser user = userService.requireUserByEmail(auth.getName());
 
-        List<Item> items = itemRepo.findAllByAuthor(user);
-        return ItemDto.toDtoList(items);
+        List<Expense> expenses = expenseRepo.findAllByAuthorOrderByDateDesc(user);
+        return ExpenseDto.toDtoList(expenses);
     }
 
-    @PreAuthorize("@itemAuth.canEdit(authentication, #itemId) and @groupAuth.isMemberOfGroups(authentication, #groupIds)")
+    @PreAuthorize("@expenseAuth.canEdit(authentication, #itemId) and @groupAuth.isMemberOfGroups(authentication, #groupIds)")
     @Transactional
-    public Item shareItem(Long itemId, Set<Long> groupIds) {
-        Item item = itemRepo.findById(itemId)
+    public Expense shareExpense(Long itemId, Set<Long> groupIds) {
+        Expense expense = expenseRepo.findById(itemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         Set<UserGroup> sharedGroups = (Set<UserGroup>) groupRepo.findAllById(groupIds);
 
-        item.setSharedGroups(sharedGroups);
-        return itemRepo.save(item);
+        expense.setSharedGroups(sharedGroups);
+        return expenseRepo.save(expense);
     }
 
-    @PreAuthorize("@itemAuth.canEdit(authentication, #itemId)")
-    public void deleteItem(Long itemId) {
-        Item item = itemRepo.findById(itemId)
+    @PreAuthorize("@expenseAuth.canEdit(authentication, #itemId)")
+    public void deleteExpense(Long itemId) {
+        Expense expense = expenseRepo.findById(itemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        itemRepo.delete(item);
+        expenseRepo.delete(expense);
     }
 }

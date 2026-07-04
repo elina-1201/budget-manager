@@ -1,23 +1,23 @@
 package org.artso.budget_manager.security.permissions;
 
 import lombok.RequiredArgsConstructor;
-import org.artso.budget_manager.item.dto.ItemRequest;
-import org.artso.budget_manager.item.Item;
+import org.artso.budget_manager.expense.dto.ExpenseRequest;
+import org.artso.budget_manager.expense.Expense;
 import org.artso.budget_manager.group.GroupRepo;
-import org.artso.budget_manager.item.ItemRepo;
+import org.artso.budget_manager.expense.ExpenseRepo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-@Component("itemAuth")
+@Component("expenseAuth")
 @RequiredArgsConstructor
-public class ItemAuth {
-    private final ItemRepo itemRepo;
+public class ExpenseAuth {
+    private final ExpenseRepo expenseRepo;
     private final GroupRepo groupRepo;
     private final GroupAuth groupAuth;
 
-    public boolean canCreate(Authentication auth, ItemRequest request) {
+    public boolean canCreate(Authentication auth, ExpenseRequest request) {
         if (auth == null || !auth.isAuthenticated() || request == null) {
             return false;
         }
@@ -31,21 +31,21 @@ public class ItemAuth {
             return false;
         }
 
-        Item item = itemRepo.findById(itemId).orElse(null);
-        if (item == null) {
+        Expense expense = expenseRepo.findById(itemId).orElse(null);
+        if (expense == null) {
             return false;
         }
 
         String email = auth.getName().toLowerCase();
 
         // Own it? → access
-        if (item.getAuthor().getEmail().equalsIgnoreCase(email)) {
+        if (expense.getAuthor().getEmail().equalsIgnoreCase(email)) {
             return true;
         }
 
         // Shared to any of my groups?
-        if (item.getSharedGroups() != null && !item.getSharedGroups().isEmpty()) {
-            return item.getSharedGroups().stream()
+        if (expense.getSharedGroups() != null && !expense.getSharedGroups().isEmpty()) {
+            return expense.getSharedGroups().stream()
                 .anyMatch(group -> groupRepo.existsByIdAndUsersEmailIgnoreCase(group.getId(), email));
         }
 
@@ -57,11 +57,11 @@ public class ItemAuth {
             return false;
         }
 
-        Item item = itemRepo.findById(itemId).orElse(null);
-        if (item == null) {
+        Expense expense = expenseRepo.findById(itemId).orElse(null);
+        if (expense == null) {
             return false;
         }
 
-        return item.getAuthor().getEmail().equalsIgnoreCase(auth.getName().toLowerCase());
+        return expense.getAuthor().getEmail().equalsIgnoreCase(auth.getName().toLowerCase());
     }
 }

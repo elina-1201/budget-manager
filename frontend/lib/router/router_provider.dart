@@ -40,7 +40,7 @@ String? redirectLogic(
 
   if (path == '/splash') {
     if (authMode != AuthMode.unauthenticated) {
-      return '/items';
+      return '/expenses';
     } else {
       return '/login';
     }
@@ -50,7 +50,7 @@ String? redirectLogic(
   final isPublicPath = publicPaths.contains(state.matchedLocation);
 
   if (!hasAccess && !isPublicPath) return '/login';
-  if (hasAccess && isPublicPath) return '/items';
+  if (hasAccess && isPublicPath) return '/expenses';
 
   return null;
 }

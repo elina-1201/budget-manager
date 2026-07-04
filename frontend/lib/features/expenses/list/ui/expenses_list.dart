@@ -1,31 +1,31 @@
-import 'package:budget_manager/data/models/item.dart';
+import 'package:budget_manager/data/models/expense.dart';
 import 'package:budget_manager/features/expenses/list/ui/alert_on_delete.dart';
-import 'package:budget_manager/features/expenses/list/ui/item_tile.dart';
+import 'package:budget_manager/features/expenses/list/ui/expense_tile.dart';
 import 'package:flutter/material.dart';
 
-class ItemsList extends StatelessWidget {
-  const ItemsList({super.key, required this.items});
-  final List<Item> items;
+class ExpensesList extends StatelessWidget {
+  const ExpensesList({super.key, required this.expenses});
+  final List<Expense> expenses;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: items.length,
+      itemCount: expenses.length,
       itemBuilder: (context, index) {
-        final item = items[index];
+        final expense = expenses[index];
         return Dismissible(
-          key: ValueKey(item.id),
+          key: ValueKey(expense.id),
           background: const DeleteBackground(),
           direction: DismissDirection.endToStart,
           confirmDismiss: (DismissDirection direction) async {
             return await showDialog(
               context: context,
               builder: (BuildContext context) {
-                return AlertOnDelete(item: item);
+                return AlertOnDelete(expense: expense);
               },
             );
           },
-          child: ItemTile(item: item),
+          child: ExpenseTile(expense: expense),
         );
       },
     );

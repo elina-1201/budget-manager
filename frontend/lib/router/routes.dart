@@ -1,8 +1,8 @@
 import 'package:budget_manager/features/auth/ui/login_screen.dart';
 import 'package:budget_manager/features/auth/ui/register_screen.dart';
-import 'package:budget_manager/features/expenses/add/ui/add_item_screen.dart';
-import 'package:budget_manager/features/expenses/details/ui/item_details_screen.dart';
-import 'package:budget_manager/features/expenses/list/ui/items_list_screen.dart';
+import 'package:budget_manager/features/expenses/add/ui/add_expense_screen.dart';
+import 'package:budget_manager/features/expenses/details/ui/expense_details_screen.dart';
+import 'package:budget_manager/features/expenses/list/ui/expenses_list_screen.dart';
 import 'package:budget_manager/router/app_shell.dart';
 import 'package:budget_manager/shared/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,20 +20,20 @@ List<RouteBase> routes = [
       StatefulShellBranch(
         routes: [
           GoRoute(
-            path: '/items',
-            builder: (_, _) => const ItemsListScreen(),
+            path: '/expenses',
+            builder: (_, _) => const ExpensesListScreen(),
             routes: [
               GoRoute(
-                path: 'add_item',
-                builder: (_, _) => const AddItemScreen(),
+                path: 'add_expense',
+                builder: (_, _) => const AddExpenseScreen(),
               ),
             ],
           ),
           GoRoute(
-            path: '/item_details/:itemId',
+            path: '/expense_details/:expenseId',
             builder: (_, state) {
-              final int id = _parseIntParam(state, 'itemId');
-              return ItemDetailsScreen(itemId: id);
+              final int id = _parseIntParam(state, 'expenseId');
+              return ExpenseDetailsScreen(expenseId: id);
             },
           ),
         ],

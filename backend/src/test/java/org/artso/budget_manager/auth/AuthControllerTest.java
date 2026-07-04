@@ -200,7 +200,7 @@ class AuthControllerTest {
         String accessToken = tokens.get("access_token").asText();
 
         // Act: Use the access token to make an authenticated request to a protected endpoint
-        mockMvc.perform(get("/item")
+        mockMvc.perform(get("/expense")
                 .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk());
 
@@ -212,7 +212,7 @@ class AuthControllerTest {
     void testAccessTokenExpiration() throws Exception {
         // Act & Assert: Simulate an expired token independent of configured TTL
         String expiredAccessToken = createExpiredAccessToken(userEmail);
-        mockMvc.perform(get("/item")
+        mockMvc.perform(get("/expense")
                 .header("Authorization", "Bearer " + expiredAccessToken))
                 .andExpect(status().isUnauthorized());
     }
@@ -243,7 +243,7 @@ class AuthControllerTest {
 
         // Assert 1: Verify access token is expired
         String expiredAccessToken = createExpiredAccessToken(userEmail);
-        mockMvc.perform(get("/item")
+        mockMvc.perform(get("/expense")
                 .header("Authorization", "Bearer " + expiredAccessToken))
                 .andExpect(status().isUnauthorized());
 
@@ -262,7 +262,7 @@ class AuthControllerTest {
         var newTokens = objectMapper.readTree(newResponse);
         String newAccessToken = newTokens.get("access_token").asText();
 
-        mockMvc.perform(get("/item")
+        mockMvc.perform(get("/expense")
                 .header("Authorization", "Bearer " + newAccessToken))
                 .andExpect(status().isOk());
     }
@@ -295,7 +295,7 @@ class AuthControllerTest {
     @DisplayName("Should reject unauthenticated requests to protected endpoints")
     void testUnauthenticatedRequest_Rejected() throws Exception {
         // Act & Assert: Request without credentials should be rejected
-        mockMvc.perform(get("/item"))
+        mockMvc.perform(get("/expense"))
                 .andExpect(status().isUnauthorized());
     }
 

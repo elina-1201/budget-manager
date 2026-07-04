@@ -19,7 +19,7 @@ class DatabaseConnection {
 
   Future<void> _onCreate(Database db, int version) async {
     await _createCategoryTable(db);
-    await _createItemTable(db);
+    await _createExpenseTable(db);
   }
 
   Future<void> _createCategoryTable(Database db) async {
@@ -33,12 +33,12 @@ class DatabaseConnection {
     ''');
   }
 
-  Future<void> _createItemTable(Database db) async {
-    const String itemTable = 'item';
+  Future<void> _createExpenseTable(Database db) async {
+    const String expenseTable = 'expense';
     const String realType = 'REAL NOT NULL';
 
     await db.execute('''
-      CREATE TABLE $itemTable (
+      CREATE TABLE $expenseTable (
         id $idType,
         name $textType,
         amount $realType,

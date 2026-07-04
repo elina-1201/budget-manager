@@ -9,7 +9,7 @@ import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import org.artso.budget_manager.category.Category;
 import org.artso.budget_manager.group.UserGroup;
-import org.artso.budget_manager.item.Item;
+import org.artso.budget_manager.expense.Expense;
 
 import java.util.List;
 import java.util.Set;
@@ -40,5 +40,5 @@ public class AppUser {
     @OneToMany(mappedBy = "author")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Item> items;
+    private List<Expense> expenses;
 }

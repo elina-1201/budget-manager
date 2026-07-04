@@ -1,15 +1,15 @@
-import 'package:budget_manager/data/models/item_request_body.dart';
+import 'package:budget_manager/data/models/expense_remote_request.dart';
 import 'package:budget_manager/data/repositories/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'add_item_notifier.g.dart';
+part 'add_expense_notifier.g.dart';
 
 @riverpod
-class AddItemNotifier extends _$AddItemNotifier {
+class AddExpenseNotifier extends _$AddExpenseNotifier {
   @override
   FutureOr<void> build() => null;
 
-  Future<void> addItem({
+  Future<void> addExpense({
     required String name,
     required String description,
     required double amount,
@@ -18,14 +18,17 @@ class AddItemNotifier extends _$AddItemNotifier {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = await ref.read(itemRepositoryProvider.future);
-      await repo.saveItem(
-        body: ItemRequestBody(
+      final repo = await ref.read(expenseRepositoryProvider.future);
+      await repo.saveExpense(
+        body: ExpenseRemoteReq(
           name: name,
           description: description,
           amount: amount,
           categoryId: categoryId,
-          date: date,
+          date: date
+              .toIso8601String()
+              .split('T')
+              .first, // Format date as 'yyyy-MM-dd'
         ),
       );
     });

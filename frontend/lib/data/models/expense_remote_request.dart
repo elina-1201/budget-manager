@@ -1,12 +1,12 @@
-class ItemRequestBody {
+class ExpenseRemoteReq {
   final String name;
   final String? description;
   final double amount;
   final List<int>? sharedGroupIds;
   final int categoryId;
-  final DateTime date;
+  final String date;
 
-  ItemRequestBody({
+  ExpenseRemoteReq({
     required this.name,
     this.description,
     required this.amount,
@@ -24,10 +24,5 @@ class ItemRequestBody {
       'categoryId': categoryId,
       'date': date,
     };
-  }
-
-  @override
-  String toString() {
-    return 'ItemRequestBody(name: $name, description: $description, amount: $amount, sharedGroupIds: $sharedGroupIds, categoryId: $categoryId, date: $date)';
   }
 }

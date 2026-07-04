@@ -1,29 +1,27 @@
 import 'package:budget_manager/core/theme/app_colors.dart';
-import 'package:budget_manager/data/models/item.dart';
+import 'package:budget_manager/data/models/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ItemTile extends StatelessWidget {
-  const ItemTile({super.key, required this.item});
+class ExpenseTile extends StatelessWidget {
+  const ExpenseTile({super.key, required this.expense});
 
-  final Item item;
+  final Expense expense;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Text(
-        DateTime.fromMillisecondsSinceEpoch(
-          item.date ?? 0,
-        ).day.toString().padLeft(2, '0'),
+        '${expense.date.day}',
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      title: Text(item.name),
-      subtitle: (item.description != null && item.description!.isNotEmpty)
-          ? Text(item.description!)
+      title: Text(expense.name),
+      subtitle: (expense.description != null && expense.description!.isNotEmpty)
+          ? Text(expense.description!)
           : null,
-      trailing: Text('${item.amount.toStringAsFixed(2)} KM'),
+      trailing: Text('${expense.amount.toStringAsFixed(2)} KM'),
       onTap: () {
-        context.push('/item_details/${item.id}');
+        context.push('/expense_details/${expense.id}');
       },
     );
   }

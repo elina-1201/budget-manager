@@ -5,9 +5,9 @@ import 'package:budget_manager/core/storage/auth_state_provider.dart';
 import 'package:budget_manager/data/repositories/category_repository.dart';
 import 'package:budget_manager/data/repositories/category_repository_local.dart';
 import 'package:budget_manager/data/repositories/category_repository_remote.dart';
-import 'package:budget_manager/data/repositories/item_repository.dart';
-import 'package:budget_manager/data/repositories/item_repository_local.dart';
-import 'package:budget_manager/data/repositories/item_repository_remote.dart';
+import 'package:budget_manager/data/repositories/expense_repository.dart';
+import 'package:budget_manager/data/repositories/expense_repository_local.dart';
+import 'package:budget_manager/data/repositories/expense_repository_remote.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repository_providers.g.dart';
@@ -23,11 +23,11 @@ Future<CategoryRepository> categoryRepository(Ref ref) async {
 }
 
 @riverpod
-Future<ItemRepository> itemRepository(Ref ref) async {
+Future<ExpenseRepository> expenseRepository(Ref ref) async {
   final mode = ref.watch(authStateProvider).asData?.value;
   if (mode == AuthMode.authenticated) {
-    return ItemRepositoryRemote(dio: ref.watch(dioProvider));
+    return ExpenseRepositoryRemote(dio: ref.watch(dioProvider));
   }
   final db = await ref.read(databaseConnectionProvider.future);
-  return ItemRepositoryLocal(db: db);
+  return ExpenseRepositoryLocal(db: db);
 }

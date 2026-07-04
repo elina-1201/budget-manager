@@ -1,21 +1,21 @@
 import 'package:budget_manager/core/exceptions/async_error_listener.dart';
-import 'package:budget_manager/features/expenses/add/providers/add_item_notifier.dart';
+import 'package:budget_manager/features/expenses/add/providers/add_expense_notifier.dart';
 import 'package:budget_manager/features/expenses/add/providers/selected_category_notifier.dart';
 import 'package:budget_manager/features/expenses/add/ui/category_drop_down.dart';
 import 'package:budget_manager/features/expenses/add/ui/date_picker.dart';
-import 'package:budget_manager/features/expenses/list/providers/item_list_notifier.dart';
+import 'package:budget_manager/features/expenses/list/providers/expense_list_notifier.dart';
 import 'package:budget_manager/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddItemForm extends ConsumerStatefulWidget {
-  const AddItemForm({super.key});
+class AddExpenseForm extends ConsumerStatefulWidget {
+  const AddExpenseForm({super.key});
 
   @override
-  ConsumerState<AddItemForm> createState() => _AddItemFormState();
+  ConsumerState<AddExpenseForm> createState() => _AddExpenseFormState();
 }
 
-class _AddItemFormState extends ConsumerState<AddItemForm> {
+class _AddExpenseFormState extends ConsumerState<AddExpenseForm> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _name;
@@ -43,12 +43,12 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
 
   @override
   Widget build(BuildContext context) {
-    final addItemState = ref.watch(addItemProvider);
-    ref.listenAsyncError(addItemProvider, context: context);
-    ref.listen<AsyncValue<void>>(addItemProvider, (_, next) {
+    final addExpenseState = ref.watch(addExpenseProvider);
+    ref.listenAsyncError(addExpenseProvider, context: context);
+    ref.listen<AsyncValue<void>>(addExpenseProvider, (_, next) {
       next.whenOrNull(
         data: (_) {
-          ref.invalidate(itemsListProvider);
+          ref.invalidate(expensesListProvider);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('Added successfully')));
@@ -87,10 +87,10 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    _addNewItem();
+                    _addNewExpense();
                   }
                 },
-                child: addItemState.isLoading
+                child: addExpenseState.isLoading
                     ? const SizedBox(
                         height: 20,
                         width: 20,
@@ -105,9 +105,12 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     );
   }
 
-  void _addNewItem() {
+  void _addNewExpense() {
     final amountText = _amount.text.replaceAll(',', '.');
     final amount = double.parse(amountText);
+    final DateTime selectedDate = DateTime.parse(
+      _dateController.text.split('.').reversed.join('-'),
+    );
 
     final categoryId = ref.read(selectedCategoryProvider)?.id;
     if (categoryId == null) {
@@ -118,15 +121,13 @@ class _AddItemFormState extends ConsumerState<AddItemForm> {
     }
 
     ref
-        .read(addItemProvider.notifier)
-        .addItem(
+        .read(addExpenseProvider.notifier)
+        .addExpense(
           name: _name.text,
           description: _description.text,
           amount: amount,
           categoryId: categoryId,
-          date: DateTime.parse(
-            _dateController.text.split('.').reversed.join('-'),
-          ),
+          date: selectedDate,
         );
   }
 

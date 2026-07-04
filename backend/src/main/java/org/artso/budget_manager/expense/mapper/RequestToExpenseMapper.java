@@ -1,7 +1,7 @@
-package org.artso.budget_manager.item.mapper;
+package org.artso.budget_manager.expense.mapper;
 
-import org.artso.budget_manager.item.dto.ItemRequest;
-import org.artso.budget_manager.item.Item;
+import org.artso.budget_manager.expense.Expense;
+import org.artso.budget_manager.expense.dto.ExpenseRequest;
 import org.artso.budget_manager.common.mapper.GenericRequestToEntityMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -14,6 +14,6 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL
 )
-public interface RequestItemToEntityMapper extends GenericRequestToEntityMapper<ItemRequest, Item> {
-    void mapFromRequestToEntity(ItemRequest request, @MappingTarget Item entity);
+public interface RequestToExpenseMapper extends GenericRequestToEntityMapper<ExpenseRequest, Expense> {
+    void mapFromRequestToEntity(ExpenseRequest request, @MappingTarget Expense entity);
 }

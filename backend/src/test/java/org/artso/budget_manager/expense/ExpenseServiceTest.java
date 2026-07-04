@@ -1,7 +1,7 @@
-package org.artso.budget_manager.item;
+package org.artso.budget_manager.expense;
 
-import org.artso.budget_manager.item.dto.ItemDto;
-import org.artso.budget_manager.item.dto.ItemRequest;
+import org.artso.budget_manager.expense.dto.ExpenseDto;
+import org.artso.budget_manager.expense.dto.ExpenseRequest;
 import org.artso.budget_manager.auth.AppUser;
 import org.artso.budget_manager.auth.AppUserService;
 import org.artso.budget_manager.category.Category;
@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -26,9 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class ItemServiceTest {
+class ExpenseServiceTest {
     @MockitoBean
-    private ItemRepo repo;
+    private ExpenseRepo repo;
 
     @MockitoBean
     private AppUserService userService;
@@ -36,13 +37,16 @@ class ItemServiceTest {
     @MockitoBean
     private CategoryRepo categoryRepo;
 
+    @MockitoBean
+    private GroupRepo groupRepo;
+
     @Autowired
-    private ItemService itemService;
+    private ExpenseService expenseService;
 
     @Test
     @WithMockUser(username = "user@example.com")
-    @DisplayName("Should return expected ItemDto when given valid request and authenticated user")
-    void createItem_returnsExpectedDto() {
+    @DisplayName("Should return expected ExpenseDto when given valid request and authenticated user")
+    void createExpense_returnsExpectedDto() {
         Authentication auth = new UsernamePasswordAuthenticationToken("user@example.com", "password");
 
         AppUser author = new AppUser();
@@ -53,21 +57,22 @@ class ItemServiceTest {
         category.setName("Food");
         when(categoryRepo.findById(7L)).thenReturn(Optional.of(category));
 
-        when(repo.save(any(Item.class))).thenAnswer(invocation -> {
-            Item item = invocation.getArgument(0);
-            item.setId(42L);
-            return item;
+        when(repo.save(any(Expense.class))).thenAnswer(invocation -> {
+            Expense expense = invocation.getArgument(0);
+            expense.setId(42L);
+            return expense;
         });
 
-        ItemRequest request = new ItemRequest(
+        ExpenseRequest request = new ExpenseRequest(
                 "Lunch",
                 "Team lunch",
                 new BigDecimal("12.50"),
                 Collections.emptySet(),
-                7L
+                7L,
+                LocalDate.now().minusDays(1)
         );
 
-        ItemDto result = itemService.createItem(request, auth);
+        ExpenseDto result = expenseService.createExpense(request, auth);
 
         assertAll(
                 () -> assertEquals(42L, result.getId()),
@@ -77,7 +82,4 @@ class ItemServiceTest {
                 () -> assertEquals("Food", result.getCategory())
         );
     }
-
-    @MockitoBean
-    private GroupRepo groupRepo;
 }
