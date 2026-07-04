@@ -14,6 +14,8 @@ class LoginForm extends ConsumerStatefulWidget {
 }
 
 class _LoginFormState extends ConsumerState<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -36,32 +38,44 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     ref.listenAsyncError(loginProvider, context: context);
 
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            EmailField(controller: _email),
-            PasswordField(controller: _password),
-            const SizedBox(height: 12),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(30.0, 60.0, 30.0, 0.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            spacing: 14.0,
+            children: [
+              EmailField(controller: _email, showClearButton: true),
+              PasswordField(controller: _password, showClearButton: true),
 
-            AuthButton(
-              buttonText: 'Login',
-              onPressed: () => ref
-                  .read(loginProvider.notifier)
-                  .login(email: _email.text, password: _password.text),
-            ),
-            TextButton(
-              onPressed: () => context.push('/register'),
-              child: const Text('Don\'t have an account? Register here'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await ref.read(authStateProvider.notifier).enterGuestMode();
-              },
-              child: const Text('Continue as Guest'),
-            ),
-          ],
+              TextButton(
+                onPressed: () => context.push('/register'),
+                child: const Text('Don\'t have an account? Register here'),
+              ),
+
+              AuthButton(
+                buttonText: 'Login',
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    ref
+                        .read(loginProvider.notifier)
+                        .login(email: _email.text, password: _password.text);
+                  }
+                },
+              ),
+
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 69.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await ref.read(authStateProvider.notifier).enterGuestMode();
+                  },
+                  child: const Text('Continue as Guest'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:budget_manager/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/features/auth/providers/register_notifier.dart';
+import 'package:budget_manager/shared/validator/validator.dart';
 import 'package:budget_manager/shared/widgets/auth_fields/auth_fields.dart';
+import 'package:budget_manager/shared/widgets/clearable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,9 +14,12 @@ class RegisterForm extends ConsumerStatefulWidget {
 }
 
 class _RegisterFormState extends ConsumerState<RegisterForm> {
+  final _formKey = GlobalKey<FormState>();
+
   late final TextEditingController _name;
   late final TextEditingController _email;
   late final TextEditingController _password;
+  late final TextEditingController _repeatPassword;
 
   @override
   void initState() {
@@ -22,6 +27,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     _name = TextEditingController();
     _email = TextEditingController();
     _password = TextEditingController();
+    _repeatPassword = TextEditingController();
   }
 
   @override
@@ -29,6 +35,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     _name.dispose();
     _email.dispose();
     _password.dispose();
+    _repeatPassword.dispose();
     super.dispose();
   }
 
@@ -38,28 +45,45 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _name,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            EmailField(controller: _email),
-            PasswordField(controller: _password),
-            const SizedBox(height: 12),
-            AuthButton(
-              buttonText: 'Register',
-              onPressed: () => ref
-                  .read(registerProvider.notifier)
-                  .register(
-                    name: _name.text,
-                    email: _email.text,
-                    password: _password.text,
-                  ),
-            ),
-          ],
+        padding: const EdgeInsets.fromLTRB(30.0, 60.0, 30.0, 0.0),
+
+        child: Form(
+          key: _formKey,
+          child: Column(
+            spacing: 14.0,
+            children: [
+              ClearableTextField(
+                controller: _name,
+                labelText: 'Name',
+                validator: Validator.required(),
+              ),
+              EmailField(controller: _email, showClearButton: true),
+              PasswordField(controller: _password, showClearButton: true),
+              PasswordField(
+                controller: _repeatPassword,
+                label: 'Repeat Password',
+                showClearButton: true,
+                validator: (value) =>
+                    Validator.passwordMatch(_password.text)(value),
+              ),
+
+              const SizedBox(height: 12),
+              AuthButton(
+                buttonText: 'Register',
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    ref
+                        .read(registerProvider.notifier)
+                        .register(
+                          name: _name.text,
+                          email: _email.text,
+                          password: _password.text,
+                        );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

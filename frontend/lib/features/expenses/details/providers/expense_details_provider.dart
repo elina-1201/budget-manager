@@ -1,5 +1,4 @@
 import 'package:budget_manager/data/models/expense.dart';
-import 'package:budget_manager/data/models/expense_local.dart';
 import 'package:budget_manager/data/repositories/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

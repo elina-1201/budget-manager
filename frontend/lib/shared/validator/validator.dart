@@ -28,6 +28,17 @@ abstract final class Validator {
     return validNumMessage;
   };
 
+  static ValidatorFn passwordLength({
+    String message = 'Password must be at least 8 characters',
+  }) =>
+      (value) => _isBlank(value) || value!.length < 8 ? message : null;
+
+  static ValidatorFn passwordMatch(
+    String password, {
+    String message = 'Passwords do not match',
+  }) =>
+      (value) => _isBlank(value) || value != password ? message : null;
+
   static ValidatorFn compose(List<ValidatorFn> validators) => (value) {
     for (final v in validators) {
       final error = v(value);

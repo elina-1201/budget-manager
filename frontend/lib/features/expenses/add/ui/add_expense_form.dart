@@ -5,6 +5,7 @@ import 'package:budget_manager/features/expenses/add/ui/category_drop_down.dart'
 import 'package:budget_manager/features/expenses/add/ui/date_picker.dart';
 import 'package:budget_manager/features/expenses/list/providers/expense_list_notifier.dart';
 import 'package:budget_manager/shared/validator/validator.dart';
+import 'package:budget_manager/shared/widgets/clearable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,19 +66,19 @@ class _AddExpenseFormState extends ConsumerState<AddExpenseForm> {
           child: Column(
             spacing: 14.0,
             children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Name'),
+              ClearableTextField(
                 controller: _name,
+                labelText: 'Name',
                 validator: Validator.required(),
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
+              ClearableTextField(
                 controller: _description,
+                labelText: 'Description',
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Amount'),
-                keyboardType: TextInputType.number,
+              ClearableTextField(
                 controller: _amount,
+                labelText: 'Amount',
+                keyboardType: TextInputType.number,
                 validator: Validator.positiveNumber(),
               ),
               CategoryDropDown(),

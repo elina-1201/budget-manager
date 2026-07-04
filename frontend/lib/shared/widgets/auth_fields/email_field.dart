@@ -1,18 +1,35 @@
+import 'package:budget_manager/shared/validator/validator.dart';
+import 'package:budget_manager/shared/widgets/clearable_text_field.dart';
 import 'package:flutter/material.dart';
 
 class EmailField extends StatelessWidget {
   final TextEditingController controller;
   final String? label;
+  final bool showClearButton;
 
-  const EmailField({super.key, required this.controller, this.label});
+  const EmailField({
+    super.key,
+    required this.controller,
+    this.label,
+    this.showClearButton = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    final field = TextFormField(
       controller: controller,
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(labelText: label ?? 'Email'),
+      validator: Validator.email(),
     );
+
+    return showClearButton
+        ? ClearableTextField(
+            controller: controller,
+            labelText: label ?? 'Email',
+            validator: Validator.email(),
+          )
+        : field;
   }
 }
