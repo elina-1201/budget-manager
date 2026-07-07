@@ -1,6 +1,6 @@
-import 'package:budget_manager/core/exceptions/app_provider_observer.dart';
-import 'package:budget_manager/core/theme/app_theme.dart';
-import 'package:budget_manager/router/router_provider.dart';
+import 'package:budget_manager/src/core/exceptions/app_provider_observer.dart';
+import 'package:budget_manager/src/core/theme/app_theme.dart';
+import 'package:budget_manager/src/router/router_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
