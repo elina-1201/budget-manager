@@ -3,7 +3,7 @@ import 'package:budget_manager/src/core/storage/auth_storage_provider.dart';
 import 'package:budget_manager/src/core/storage/shared_prefs_provider.dart';
 import 'package:budget_manager/src/core/token/token_refresh_provider.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/category_notifier.dart';
-import 'package:budget_manager/src/features/expenses/add/providers/selected_category_notifier.dart';
+import 'package:budget_manager/src/features/expenses/add/providers/selected_notifier.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

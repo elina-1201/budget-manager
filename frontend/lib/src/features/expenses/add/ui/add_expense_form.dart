@@ -1,7 +1,7 @@
 import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/add_expense_notifier.dart';
-import 'package:budget_manager/src/features/expenses/add/providers/selected_category_notifier.dart';
+import 'package:budget_manager/src/features/expenses/add/providers/selected_notifier.dart';
 import 'package:budget_manager/src/features/expenses/add/ui/category_drop_down.dart';
 import 'package:budget_manager/src/features/expenses/add/ui/date_picker.dart';
 import 'package:budget_manager/src/features/expenses/list/providers/expense_list_notifier.dart';

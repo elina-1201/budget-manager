@@ -1,5 +1,5 @@
 import 'package:budget_manager/generated/l10n.dart';
-import 'package:budget_manager/src/features/expenses/add/providers/selected_date_notifier.dart';
+import 'package:budget_manager/src/features/expenses/add/providers/selected_notifier.dart';
 import 'package:budget_manager/src/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
