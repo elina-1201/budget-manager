@@ -1,6 +1,6 @@
 import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/error_mapper.dart';
-import 'package:budget_manager/src/data/models/category.dart';
+import 'package:budget_manager/src/domain/models/category.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/category_notifier.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/selected_notifier.dart';
 import 'package:budget_manager/src/features/expenses/add/ui/color_picker.dart';

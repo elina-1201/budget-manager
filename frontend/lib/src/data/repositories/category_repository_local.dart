@@ -1,8 +1,11 @@
-import 'package:budget_manager/src/data/models/category.dart';
+import 'package:budget_manager/src/data/models/category_db.dart';
 import 'package:budget_manager/src/data/repositories/category_repository.dart';
+import 'package:budget_manager/src/domain/models/category.dart';
 import 'package:sqflite/sqflite.dart';
 
-class CategoryRepositoryLocal implements CategoryRepository {
+class CategoryRepositoryLocal
+    with CategoryMapper
+    implements CategoryRepository {
   final Database db;
   CategoryRepositoryLocal({required this.db});
 
@@ -10,13 +13,9 @@ class CategoryRepositoryLocal implements CategoryRepository {
 
   @override
   Future<List<Category>> getCategories() async {
-    List<Map<String, dynamic>> maps = await db.query(
-      tableName,
-      orderBy: 'id DESC',
-    );
-    return List.generate(maps.length, (index) {
-      return Category.fromMap(maps[index]);
-    });
+    final rows = await db.query(tableName, orderBy: 'id DESC');
+    if (rows.isEmpty) return [];
+    return rows.map((row) => toDomain(CategoryDB.fromMap(row))).toList();
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'package:budget_manager/src/data/models/category.dart';
+import 'package:budget_manager/src/data/models/category_db.dart';
 import 'package:budget_manager/src/data/models/expense.dart';
 import 'package:budget_manager/src/data/models/expense_local.dart';
 import 'package:budget_manager/src/data/models/expense_remote_request.dart';
@@ -26,7 +26,9 @@ class ExpenseRepositoryLocal implements ExpenseRepository {
       whereArgs: [body.categoryId],
     );
 
-    final Category category = rows.map((row) => Category.fromMap(row)).first;
+    final CategoryDB category = rows
+        .map((row) => CategoryDB.fromMap(row))
+        .first;
     final int dateInMillis = DateTime.parse(body.date).millisecondsSinceEpoch;
 
     ExpenseLocal expense = ExpenseLocal(

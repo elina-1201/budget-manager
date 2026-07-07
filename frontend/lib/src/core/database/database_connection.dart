@@ -28,7 +28,8 @@ class DatabaseConnection {
     await db.execute('''
       CREATE TABLE $categoryTable (
         id $idType,
-        name $textType
+        name $textType,
+        color INTEGER NOT NULL
       )
     ''');
   }

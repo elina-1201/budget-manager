@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:budget_manager/src/data/models/category.dart';
+import 'package:budget_manager/src/domain/models/category.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'selected_notifier.g.dart';
