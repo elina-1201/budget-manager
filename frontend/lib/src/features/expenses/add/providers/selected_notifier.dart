@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:budget_manager/src/data/models/category.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,4 +19,12 @@ class SelectedDateNotifier extends _$SelectedDateNotifier {
   DateTime? build() => DateTime.now();
 
   void select(DateTime? date) => state = date;
+}
+
+@riverpod
+class SelectedColorNotifier extends _$SelectedColorNotifier {
+  @override
+  Color? build() => null;
+
+  void select(Color? color) => state = color;
 }

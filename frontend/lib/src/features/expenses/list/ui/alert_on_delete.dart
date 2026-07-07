@@ -2,8 +2,7 @@ import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/src/data/models/expense.dart';
 import 'package:budget_manager/src/features/expenses/list/providers/expense_list_notifier.dart';
-import 'package:budget_manager/src/shared/widgets/modal/button_type.dart';
-import 'package:budget_manager/src/shared/widgets/modal/modal_text_button.dart';
+import 'package:budget_manager/src/shared/widgets/modal/modal_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

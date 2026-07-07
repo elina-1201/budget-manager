@@ -79,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwords_match": MessageLookupByLibrary.simpleMessage(
       "Passwords do not match",
     ),
+    "pickColor": MessageLookupByLibrary.simpleMessage("Pick a color"),
     "positive_number": MessageLookupByLibrary.simpleMessage(
       "Must be greater than 0",
     ),

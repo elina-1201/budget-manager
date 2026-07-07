@@ -3,9 +3,9 @@ import 'package:budget_manager/src/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/src/data/models/category.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/category_notifier.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/selected_notifier.dart';
+import 'package:budget_manager/src/features/expenses/add/ui/color_picker.dart';
 import 'package:budget_manager/src/features/expenses/add/ui/drop_down.dart';
-import 'package:budget_manager/src/shared/widgets/modal/button_type.dart';
-import 'package:budget_manager/src/shared/widgets/modal/modal_text_button.dart';
+import 'package:budget_manager/src/shared/widgets/modal/modal_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -69,10 +69,18 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text(s.add_new_category),
-          content: TextField(
-            autofocus: true,
-            decoration: InputDecoration(labelText: s.category_name),
-            controller: _categoryName,
+          content: Row(
+            children: [
+              CustomColorPicker(),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  autofocus: true,
+                  decoration: InputDecoration(labelText: s.category_name),
+                  controller: _categoryName,
+                ),
+              ),
+            ],
           ),
           actions: [
             ModalTextButton(
@@ -82,11 +90,11 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
               label: s.cancel,
               type: ButtonType.cancel,
             ),
-            OutlinedButton(
-              onPressed: () async {
+            ModalOutlinedButton(
+              onPress: () async {
                 await _addCategory(dialogContext);
               },
-              child: Text(s.add.toUpperCase()),
+              label: S.of(context).add,
             ),
           ],
         );

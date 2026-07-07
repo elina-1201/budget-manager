@@ -43,6 +43,7 @@ class DatePicker extends ConsumerWidget {
     }
   }
 
+  //TODO: show date in the format of the device locale
   void _updateDateText(DateTime? date) {
     controller.text = date != null
         ? '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}'

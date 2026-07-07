@@ -79,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwords_match": MessageLookupByLibrary.simpleMessage(
       "Lozinke se ne podudaraju",
     ),
+    "pickColor": MessageLookupByLibrary.simpleMessage("Odaberi boju"),
     "positive_number": MessageLookupByLibrary.simpleMessage(
       "Mora biti veće od 0",
     ),
