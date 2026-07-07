@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/src/data/models/category.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/category_notifier.dart';
@@ -44,6 +45,7 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
         },
       );
     });
+    final s = S.of(context);
 
     return GenericDropDown<Category>(
       list: ref.watch(categoryProvider),
@@ -55,20 +57,21 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
       onAddRequest: () {
         _openAddCategoryModal();
       },
-      hintText: 'Select a category',
+      hintText: s.select_category,
       onDelete: (Category item) => _deleteCategory(item),
     );
   }
 
   void _openAddCategoryModal() {
+    final s = S.of(context);
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Add New Category'),
+          title: Text(s.add_new_category),
           content: TextField(
             autofocus: true,
-            decoration: const InputDecoration(labelText: 'Category Name'),
+            decoration: InputDecoration(labelText: s.category_name),
             controller: _categoryName,
           ),
           actions: [
@@ -76,14 +79,14 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
               onPress: () {
                 Navigator.of(dialogContext).pop();
               },
-              label: 'Cancel',
+              label: s.cancel,
               type: ButtonType.cancel,
             ),
             OutlinedButton(
               onPressed: () async {
                 await _addCategory(dialogContext);
               },
-              child: const Text("Add"),
+              child: Text(s.add.toUpperCase()),
             ),
           ],
         );

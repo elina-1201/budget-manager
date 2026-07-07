@@ -1,0 +1,88 @@
+{
+    "cancel": "Odustani",
+    "delete": "Obriši",
+    "no_expenses": "Nema troškova zasad, pokušaj dodati neke!",
+    "login": "Prijava",
+    "dont_have_account": "Nemate račun? Registrujte se ovdje",
+    "continue_as_guest": "Nastavi kao gost",
+    "register": "Registracija",
+    "name": "Ime",
+    "repeat_password": "Ponovi lozinku",
+    "add_expense": "Dodaj trošak",
+    "description": "Opis",
+    "amount": "Iznos",
+    "date": "Datum",
+    "select_date": "Odaberite datum",
+    "add": "Dodaj",
+    "added_successfully": "Uspješno dodano",
+    "select_category": "Odaberite kategoriju",
+    "please_select_category": "Molimo odaberite kategoriju",
+    "add_new_category": "Dodaj novu kategoriju",
+    "category_name": "Naziv kategorije",
+    "select_option": "Odaberite opciju",
+    "expense_details": "Detalji troška",
+    "expense_name_label": "Naziv: {name}",
+    "@expense_name_label": {
+        "description": "Label for expense name with placeholder",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Namirnice"
+            }
+        }
+    },
+    "expense_description_label": "Opis: {description}",
+    "@expense_description_label": {
+        "description": "Label for expense description with placeholder",
+        "placeholders": {
+            "description": {
+                "type": "String",
+                "example": "Sedmične namirnice"
+            }
+        }
+    },
+    "expense_amount_label": "Iznos: {amount} KM",
+    "@expense_amount_label": {
+        "description": "Label for expense amount with placeholder",
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "150.00"
+            }
+        }
+    },
+    "expense_category_label": "Kategorija: {category}",
+    "@expense_category_label": {
+        "description": "Label for expense category with placeholder",
+        "placeholders": {
+            "category": {
+                "type": "String",
+                "example": "Hrana"
+            }
+        }
+    },
+    "expenses_title": "Troškovi",
+    "confirm_deletion": "Potvrdi brisanje",
+    "confirm_delete_expense": "Jeste li sigurni da želite obrisati ovaj trošak?",
+    "deleted_successfully": "\"{name}\" uspješno obrisano",
+    "@deleted_successfully": {
+        "description": "Message shown after an expense is deleted",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Namirnice"
+            }
+        }
+    },
+    "email": "Email",
+    "password": "Lozinka",
+    "loading": "Učitavanje...",
+    "tab_expenses": "Troškovi",
+    "tab_stats": "Statistika",
+    "required_field": "Ovo polje je obavezno",
+    "valid_email": "Unesite ispravnu email adresu",
+    "positive_number": "Mora biti veće od 0",
+    "valid_number": "Unesite ispravan broj",
+    "password_length": "Lozinka mora imati najmanje 8 znakova",
+    "passwords_match": "Lozinke se ne podudaraju"
+}

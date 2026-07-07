@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/app_provider_observer.dart';
 import 'package:budget_manager/src/core/theme/app_theme.dart';
 import 'package:budget_manager/src/router/router_provider.dart';
@@ -17,11 +18,14 @@ class AppRoot extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      supportedLocales: const [
-        Locale('en', 'US'), // Sunday first
-        Locale('en', 'GB'), // Monday first
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
+      supportedLocales: S.delegate.supportedLocales,
+      locale: const Locale('bs', 'BA`'),
       routerConfig: ref.watch(goRouterProvider),
       theme: AppTheme.dark,
     );

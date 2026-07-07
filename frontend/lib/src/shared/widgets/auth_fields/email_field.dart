@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/shared/validator/validator.dart';
 import 'package:budget_manager/src/shared/widgets/clearable_text_field.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +17,21 @@ class EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+    final emailLabel = label ?? s.email;
     final field = TextFormField(
       controller: controller,
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(labelText: label ?? 'Email'),
-      validator: Validator.email(),
+      decoration: InputDecoration(labelText: emailLabel),
+      validator: Validator.email(context),
     );
 
     return showClearButton
         ? ClearableTextField(
             controller: controller,
-            labelText: label ?? 'Email',
-            validator: Validator.email(),
+            labelText: emailLabel,
+            validator: Validator.email(context),
           )
         : field;
   }

@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/src/core/storage/auth_state_provider.dart';
 import 'package:budget_manager/src/features/auth/providers/login_notifier.dart';
@@ -36,6 +37,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     ref.listenAsyncError(loginProvider, context: context);
+    final s = S.of(context);
 
     return SafeArea(
       child: Padding(
@@ -50,11 +52,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
               TextButton(
                 onPressed: () => context.push('/register'),
-                child: const Text('Don\'t have an account? Register here'),
+                child: Text(s.dont_have_account),
               ),
 
               AuthButton(
-                buttonText: 'Login',
+                buttonText: s.login,
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     ref
@@ -71,7 +73,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   onPressed: () async {
                     await ref.read(authStateProvider.notifier).enterGuestMode();
                   },
-                  child: const Text('Continue as Guest'),
+                  child: Text(s.continue_as_guest),
                 ),
               ),
             ],

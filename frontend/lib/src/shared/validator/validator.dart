@@ -1,43 +1,42 @@
+import 'package:budget_manager/generated/l10n.dart';
+import 'package:flutter/material.dart';
+
 typedef ValidatorFn = String? Function(String? value);
 
 abstract final class Validator {
-  static ValidatorFn required({String message = 'This field is required'}) =>
-      (value) => _isBlank(value) ? message : null;
+  static ValidatorFn required(BuildContext context) =>
+      (value) => _isBlank(value) ? S.of(context).required_field : null;
 
-  static ValidatorFn email({String message = 'Enter a valid email address'}) {
+  static ValidatorFn email(BuildContext context) {
     return (value) {
       final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
 
       if (_isBlank(value) || !emailRegex.hasMatch(value!)) {
-        return message;
+        return S.of(context).valid_email;
       }
       return null;
     };
   }
 
-  static ValidatorFn positiveNumber({
-    String message = 'Must be greater than 0',
-  }) => (value) {
-    String validNumMessage = 'Enter a valid number';
+  static ValidatorFn positiveNumber(BuildContext context) => (value) {
     if (!_isBlank(value)) {
       final amountText = value!.replaceAll(',', '.');
       final number = num.tryParse(amountText);
-      if (number == null) return validNumMessage;
-      return number <= 0 ? message : null;
+      if (number == null) return S.of(context).valid_number;
+      return number <= 0 ? S.of(context).positive_number : null;
     }
-    return validNumMessage;
+    return S.of(context).valid_number;
   };
 
-  static ValidatorFn passwordLength({
-    String message = 'Password must be at least 8 characters',
-  }) =>
-      (value) => _isBlank(value) || value!.length < 8 ? message : null;
+  static ValidatorFn passwordLength(BuildContext context) =>
+      (value) => _isBlank(value) || value!.length < 8
+      ? S.of(context).password_length
+      : null;
 
-  static ValidatorFn passwordMatch(
-    String password, {
-    String message = 'Passwords do not match',
-  }) =>
-      (value) => _isBlank(value) || value != password ? message : null;
+  static ValidatorFn passwordMatch(BuildContext context, String password) =>
+      (value) => _isBlank(value) || value != password
+      ? S.of(context).passwords_match
+      : null;
 
   static ValidatorFn compose(List<ValidatorFn> validators) => (value) {
     for (final v in validators) {

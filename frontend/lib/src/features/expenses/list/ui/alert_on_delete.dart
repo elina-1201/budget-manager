@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/src/data/models/expense.dart';
 import 'package:budget_manager/src/features/expenses/list/providers/expense_list_notifier.dart';
@@ -12,20 +13,21 @@ class AlertOnDelete extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = S.of(context);
     return AlertDialog(
-      title: const Text("Confirm Deletion"),
-      content: const Text("Are you sure you want to delete this expense?"),
+      title: Text(s.confirm_deletion),
+      content: Text(s.confirm_delete_expense),
       actions: [
         ModalTextButton(
           onPress: () => Navigator.of(context).pop(false),
-          label: "CANCEL",
+          label: s.cancel,
           type: ButtonType.cancel,
         ),
         ModalTextButton(
           onPress: () async {
             await _deleteExpense(expense, context, ref);
           },
-          label: "DELETE",
+          label: s.delete,
           type: ButtonType.delete,
         ),
       ],
@@ -49,7 +51,9 @@ class AlertOnDelete extends ConsumerWidget {
         ).showSnackBar(SnackBar(content: Text(msg)));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('"${expense.name}" deleted successfully')),
+          SnackBar(
+            content: Text(S.of(context).deleted_successfully(expense.name)),
+          ),
         );
       }
       Navigator.of(context).pop(!currentState.hasError);

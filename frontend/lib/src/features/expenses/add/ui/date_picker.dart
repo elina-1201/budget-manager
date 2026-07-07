@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/selected_date_notifier.dart';
 import 'package:budget_manager/src/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class DatePicker extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.watch(selectedDateProvider);
+    final s = S.of(context);
 
     if (controller.text.isEmpty && selectedDate != null) {
       _updateDateText(selectedDate);
@@ -19,19 +21,17 @@ class DatePicker extends ConsumerWidget {
       controller: controller,
       readOnly: true,
       decoration: InputDecoration(
-        labelText: 'Date',
+        labelText: s.date,
         suffixIcon: const Icon(Icons.calendar_today),
       ),
       onTap: () => _selectDate(context, ref),
-      validator: Validator.required(message: 'Select a date'),
+      validator: Validator.required(context),
     );
   }
 
   Future<void> _selectDate(BuildContext context, WidgetRef ref) async {
     DateTime? selectedDate = ref.read(selectedDateProvider);
     final DateTime? picked = await showDatePicker(
-      //TODO: Change locale to device locale
-      locale: const Locale('en', 'GB'),
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),

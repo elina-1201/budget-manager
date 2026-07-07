@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,14 +39,15 @@ class _GenericDropDownState<T> extends ConsumerState<GenericDropDown<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return FormField<T>(
       initialValue: widget.selected,
-      validator: (_) => widget.selected == null ? 'Select an option' : null,
+      validator: (_) => widget.selected == null ? s.select_option : null,
       builder: (FormFieldState<T> state) {
         return DropdownMenu<T?>(
           controller: _dropdownController,
           initialSelection: widget.selected,
-          hintText: widget.hintText ?? 'Select an option',
+          hintText: widget.hintText ?? s.select_option,
           onSelected: (T? value) {
             if (widget.onAddRequest != null && value == null) {
               widget.onAddRequest!();
@@ -63,7 +65,7 @@ class _GenericDropDownState<T> extends ConsumerState<GenericDropDown<T>> {
               if (widget.onAddRequest != null)
                 DropdownMenuEntry<T?>(
                   value: null,
-                  // label: widget.addButtonLabel ?? 'Add new',
+                  // label: widget.addButtonLabel ?? s.add,
                   label: '',
                   leadingIcon: const Icon(Icons.add, size: 20),
                 ),
@@ -73,7 +75,6 @@ class _GenericDropDownState<T> extends ConsumerState<GenericDropDown<T>> {
                   label: widget.itemLabel(item),
                   trailingIcon: GestureDetector(
                     onTap: () {
-                      // state.didChange(null);
                       widget.onDelete?.call(item);
                       _dropdownController.clear();
                     },

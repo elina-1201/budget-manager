@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/shared/validator/validator.dart';
 import 'package:flutter/material.dart';
 
@@ -30,19 +31,20 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return TextFormField(
       controller: widget.controller,
       obscureText: _obscureText,
       enableSuggestions: false,
       autocorrect: false,
       decoration: InputDecoration(
-        labelText: widget.label ?? 'Password',
+        labelText: widget.label ?? s.password,
         suffixIcon: _VisibilityIcon(
           obscureText: _obscureText,
           onPressed: _toggleVisibility,
         ),
       ),
-      validator: widget.validator ?? Validator.passwordLength(),
+      validator: widget.validator ?? Validator.passwordLength(context),
     );
   }
 }

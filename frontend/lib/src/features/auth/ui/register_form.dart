@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/src/features/auth/providers/register_notifier.dart';
 import 'package:budget_manager/src/shared/validator/validator.dart';
@@ -42,6 +43,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   @override
   Widget build(BuildContext context) {
     ref.listenAsyncError(registerProvider, context: context);
+    final s = S.of(context);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -54,22 +56,22 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             children: [
               ClearableTextField(
                 controller: _name,
-                labelText: 'Name',
-                validator: Validator.required(),
+                labelText: s.name,
+                validator: Validator.required(context),
               ),
               EmailField(controller: _email, showClearButton: true),
               PasswordField(controller: _password, showClearButton: true),
               PasswordField(
                 controller: _repeatPassword,
-                label: 'Repeat Password',
+                label: s.repeat_password,
                 showClearButton: true,
                 validator: (value) =>
-                    Validator.passwordMatch(_password.text)(value),
+                    Validator.passwordMatch(context, _password.text)(value),
               ),
 
               const SizedBox(height: 12),
               AuthButton(
-                buttonText: 'Register',
+                buttonText: s.register,
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     ref

@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/src/core/exceptions/error_mapper.dart';
 import 'package:budget_manager/src/core/storage/auth_state_provider.dart';
@@ -19,10 +20,11 @@ class _ExpensesListScreenState extends ConsumerState<ExpensesListScreen> {
   Widget build(BuildContext context) {
     final expensesAsync = ref.watch(expensesListProvider);
     ref.listenAsyncError(expensesListProvider, context: context);
+    final s = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expenses'),
+        title: Text(s.expenses_title),
         leading: IconButton(
           icon: Icon(Icons.logout_sharp),
           onPressed: () {
@@ -37,7 +39,7 @@ class _ExpensesListScreenState extends ConsumerState<ExpensesListScreen> {
           return Center(child: Text(msg));
         },
         data: (expenses) => expenses.isEmpty
-            ? const Center(child: Text('No expenses yet, try adding some!'))
+            ? Center(child: Text(s.no_expenses))
             : ExpensesList(expenses: expenses),
       ),
       floatingActionButton: FloatingActionButton(

@@ -18,7 +18,7 @@ class ModalTextButton extends StatelessWidget {
     return TextButton(
       onPressed: onPress,
       child: Text(
-        _label,
+        _label.toUpperCase(),
         style: switch (_type) {
           ButtonType.cancel => TextStyle(color: AppColors.bluish),
           ButtonType.delete => TextStyle(color: AppColors.error),

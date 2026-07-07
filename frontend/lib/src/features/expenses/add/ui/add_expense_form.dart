@@ -1,3 +1,4 @@
+import 'package:budget_manager/generated/l10n.dart';
 import 'package:budget_manager/src/core/exceptions/async_error_listener.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/add_expense_notifier.dart';
 import 'package:budget_manager/src/features/expenses/add/providers/selected_category_notifier.dart';
@@ -46,13 +47,14 @@ class _AddExpenseFormState extends ConsumerState<AddExpenseForm> {
   Widget build(BuildContext context) {
     final addExpenseState = ref.watch(addExpenseProvider);
     ref.listenAsyncError(addExpenseProvider, context: context);
+    final s = S.of(context);
     ref.listen<AsyncValue<void>>(addExpenseProvider, (_, next) {
       next.whenOrNull(
         data: (_) {
           ref.invalidate(expensesListProvider);
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Added successfully')));
+          ).showSnackBar(SnackBar(content: Text(s.added_successfully)));
           _clearFormFields();
         },
       );
@@ -68,18 +70,18 @@ class _AddExpenseFormState extends ConsumerState<AddExpenseForm> {
             children: [
               ClearableTextField(
                 controller: _name,
-                labelText: 'Name',
-                validator: Validator.required(),
+                labelText: s.name,
+                validator: Validator.required(context),
               ),
               ClearableTextField(
                 controller: _description,
-                labelText: 'Description',
+                labelText: s.description,
               ),
               ClearableTextField(
                 controller: _amount,
-                labelText: 'Amount',
+                labelText: s.amount,
                 keyboardType: TextInputType.number,
-                validator: Validator.positiveNumber(),
+                validator: Validator.positiveNumber(context),
               ),
               CategoryDropDown(),
               DatePicker(controller: _dateController),
@@ -97,7 +99,7 @@ class _AddExpenseFormState extends ConsumerState<AddExpenseForm> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Add'),
+                    : Text(s.add),
               ),
             ],
           ),
@@ -117,7 +119,7 @@ class _AddExpenseFormState extends ConsumerState<AddExpenseForm> {
     if (categoryId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Please select a category')));
+      ).showSnackBar(SnackBar(content: Text(S.of(context).select_category)));
       return;
     }
 
