@@ -48,6 +48,8 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
     final s = S.of(context);
 
     return GenericDropDown<Category>(
+      leadingIconBuilder: (Category c) =>
+          CircleAvatar(radius: 10, backgroundColor: c.color ?? Colors.grey),
       list: ref.watch(categoryProvider),
       selected: ref.watch(selectedCategoryProvider),
       onChanged: (Category? value) {
@@ -99,7 +101,10 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
           ],
         );
       },
-    ).whenComplete(() => _categoryName.clear());
+    ).whenComplete(() {
+      _categoryName.clear();
+      ref.read(selectedColorProvider.notifier).select(null);
+    });
   }
 
   Future<void> _deleteCategory(Category category) async {
@@ -115,7 +120,12 @@ class _CategoryDropDownState extends ConsumerState<CategoryDropDown> {
     final categoryName = _categoryName.text.trim();
     if (categoryName.isEmpty) return;
 
-    await ref.read(categoryProvider.notifier).addCategory(name: categoryName);
+    await ref
+        .read(categoryProvider.notifier)
+        .addCategory(
+          name: categoryName,
+          color: ref.read(selectedColorProvider),
+        );
 
     // Only close the dialog and select the category if the operation succeeded
     final currentState = ref.read(categoryProvider);

@@ -14,6 +14,7 @@ class Category {
       color: map['color'] != null ? Color(map['color']) : null,
     );
   }
+
   Map<String, dynamic> toMap() {
     return {'id': id, 'name': name, 'color': color?.toARGB32()};
   }

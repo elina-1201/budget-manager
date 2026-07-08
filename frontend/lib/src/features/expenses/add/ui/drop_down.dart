@@ -10,6 +10,8 @@ class GenericDropDown<T> extends ConsumerStatefulWidget {
   final VoidCallback? onAddRequest;
   final String? addButtonLabel;
   final String? hintText;
+  final Widget? leadingIcon;
+  final Widget Function(T)? leadingIconBuilder;
   final void Function(T)? onDelete;
 
   const GenericDropDown({
@@ -21,7 +23,9 @@ class GenericDropDown<T> extends ConsumerStatefulWidget {
     this.onAddRequest,
     this.addButtonLabel,
     this.hintText,
+    this.leadingIcon,
     this.onDelete,
+    this.leadingIconBuilder,
   });
 
   @override
@@ -73,6 +77,9 @@ class _GenericDropDownState<T> extends ConsumerState<GenericDropDown<T>> {
                 return DropdownMenuEntry<T?>(
                   value: item,
                   label: widget.itemLabel(item),
+                  leadingIcon:
+                      widget.leadingIconBuilder?.call(item) ??
+                      widget.leadingIcon,
                   trailingIcon: GestureDetector(
                     onTap: () {
                       widget.onDelete?.call(item);

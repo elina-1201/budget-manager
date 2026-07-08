@@ -19,8 +19,8 @@ class CategoryRepositoryRemote
   }
 
   @override
-  Future<void> saveCategory({required String categoryName}) async {
-    await _dio.post('/category', data: {'name': categoryName});
+  Future<void> saveCategory({required CategoryDB category}) async {
+    await _dio.post('/category', data: category.toMap());
   }
 
   @override

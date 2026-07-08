@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:budget_manager/src/data/models/category_db.dart';
 import 'package:budget_manager/src/data/repositories/repository_providers.dart';
 import 'package:budget_manager/src/domain/models/category.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,11 +15,13 @@ class CategoryNotifier extends _$CategoryNotifier {
     return repo.getCategories();
   }
 
-  Future<void> addCategory({required String name}) async {
+  Future<void> addCategory({required String name, Color? color}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final repo = await ref.read(categoryRepositoryProvider.future);
-      await repo.saveCategory(categoryName: name);
+
+      CategoryDB categoryDB = CategoryDB(name: name, color: color?.toARGB32());
+      await repo.saveCategory(category: categoryDB);
       return repo.getCategories();
     });
   }

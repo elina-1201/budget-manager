@@ -19,8 +19,8 @@ class CategoryRepositoryLocal
   }
 
   @override
-  Future<void> saveCategory({required String categoryName}) async {
-    await db.insert(tableName, {'name': categoryName});
+  Future<void> saveCategory({required CategoryDB category}) async {
+    await db.insert(tableName, category.toMap());
   }
 
   @override

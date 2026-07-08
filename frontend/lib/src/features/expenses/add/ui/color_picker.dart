@@ -21,6 +21,12 @@ class CustomColorPicker extends ConsumerWidget {
 
     final selectedColor = ref.watch(selectedColorProvider) ?? randomColor;
 
+    if (ref.read(selectedColorProvider) == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(selectedColorProvider.notifier).select(randomColor);
+      });
+    }
+
     return GestureDetector(
       onTap: () => _openColorPicker(context, ref, pickerColor: selectedColor),
       child: CircleAvatar(radius: 18, backgroundColor: selectedColor),
