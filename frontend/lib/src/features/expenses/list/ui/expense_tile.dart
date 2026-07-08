@@ -1,5 +1,5 @@
 import 'package:budget_manager/src/core/theme/app_colors.dart';
-import 'package:budget_manager/src/data/models/expense.dart';
+import 'package:budget_manager/src/domain/models/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,9 +16,16 @@ class ExpenseTile extends StatelessWidget {
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
       title: Text(expense.name),
-      subtitle: (expense.description != null && expense.description!.isNotEmpty)
-          ? Text(expense.description!)
-          : null,
+      subtitle: Row(
+        children: [
+          CircleAvatar(
+            radius: 5,
+            backgroundColor: expense.category.color ?? AppColors.backgroundDark,
+          ),
+          const SizedBox(width: 5),
+          Text(expense.category.name),
+        ],
+      ),
       trailing: Text('${expense.amount.toStringAsFixed(2)} KM'),
       onTap: () {
         context.push('/expense_details/${expense.id}');

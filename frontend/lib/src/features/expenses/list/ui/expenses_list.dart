@@ -1,4 +1,4 @@
-import 'package:budget_manager/src/data/models/expense.dart';
+import 'package:budget_manager/src/domain/models/expense.dart';
 import 'package:budget_manager/src/features/expenses/list/ui/alert_on_delete.dart';
 import 'package:budget_manager/src/features/expenses/list/ui/expense_tile.dart';
 import 'package:flutter/material.dart';

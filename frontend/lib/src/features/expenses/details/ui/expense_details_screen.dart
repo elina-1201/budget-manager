@@ -30,7 +30,7 @@ class ExpenseDetailsScreen extends ConsumerWidget {
               Text(
                 s.expense_amount_label(expense.amount.toStringAsFixed(2), "KM"),
               ),
-              Text(s.expense_category_label(expense.category)),
+              Text(s.expense_category_label(expense.category.name)),
             ],
           ),
         ),

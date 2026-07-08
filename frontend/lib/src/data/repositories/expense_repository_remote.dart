@@ -1,7 +1,10 @@
-import 'package:budget_manager/src/data/models/expense.dart';
+import 'dart:ui';
+
 import 'package:budget_manager/src/data/models/expense_remote_request.dart';
 import 'package:budget_manager/src/data/models/expense_remote_response.dart';
 import 'package:budget_manager/src/data/repositories/expense_repository.dart';
+import 'package:budget_manager/src/domain/models/category.dart';
+import 'package:budget_manager/src/domain/models/expense.dart';
 import 'package:dio/dio.dart';
 
 class ExpenseRepositoryRemote implements ExpenseRepository {
@@ -40,10 +43,15 @@ class ExpenseRepositoryRemote implements ExpenseRepository {
   }
 
   Expense toDomain(ExpenseRemoteRes remote) => Expense(
+    id: remote.id,
     name: remote.name,
     description: remote.description,
     amount: remote.amount,
-    category: remote.category,
+    category: Category(
+      id: remote.categoryId,
+      name: remote.categoryName,
+      color: Color(remote.categoryColor),
+    ),
     date: DateTime.parse(remote.date), // "2026-07-04" → DateTime
   );
 }

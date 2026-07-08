@@ -28,7 +28,7 @@ class DatabaseConnection {
     await db.execute('''
       CREATE TABLE $categoryTable (
         id $idType,
-        name $textType,
+        name $textType UNIQUE,
         color INTEGER NOT NULL
       )
     ''');
@@ -43,9 +43,10 @@ class DatabaseConnection {
         id $idType,
         name $textType,
         amount $realType,
-        category $textType,
         description TEXT,
-        date INTEGER NOT NULL
+        date INTEGER NOT NULL,
+        category_id INTEGER,
+        FOREIGN KEY(category_id) REFERENCES category(id)
       )
     ''');
   }

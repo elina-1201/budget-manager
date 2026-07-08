@@ -3,16 +3,20 @@ class ExpenseLocal {
   final String name;
   final String? description;
   final double amount;
-  final String category;
+  final int categoryId;
   final int date;
+  final String? categoryName;
+  final int? categoryColor;
 
   ExpenseLocal({
     this.id,
     required this.name,
     this.description,
     required this.amount,
-    required this.category,
+    required this.categoryId,
     required this.date,
+    this.categoryName,
+    this.categoryColor,
   });
 
   factory ExpenseLocal.fromMap(Map<String, dynamic> map) {
@@ -21,8 +25,10 @@ class ExpenseLocal {
       name: map['name'],
       description: map['description'],
       amount: map['amount'].toDouble(),
-      category: map['category'],
+      categoryId: map['category_id'],
       date: map['date'],
+      categoryName: map['category_name'],
+      categoryColor: map['category_color'],
     );
   }
 
@@ -31,7 +37,7 @@ class ExpenseLocal {
       'name': name,
       'description': description,
       'amount': amount,
-      'category': category,
+      'category_id': categoryId,
       'date': date,
     };
   }
