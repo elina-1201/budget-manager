@@ -10,26 +10,81 @@ class ExpenseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text(
-        '${expense.date.day}',
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-      title: Text(expense.name),
-      subtitle: Row(
-        children: [
-          CircleAvatar(
-            radius: 5,
-            backgroundColor: expense.category.color ?? AppColors.backgroundDark,
-          ),
-          const SizedBox(width: 5),
-          Text(expense.category.name),
-        ],
-      ),
-      trailing: Text('${expense.amount.toStringAsFixed(2)} KM'),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         context.push('/expense_details/${expense.id}');
       },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: 45,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text(
+                    '${expense.date.day < 10 ? '0${expense.date.day}' : expense.date.day}',
+                    style: const TextStyle(
+                      height: 1,
+                      fontWeight: FontWeight.w100,
+                      // color: AppColors.bluish,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 30),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(expense.name, style: const TextStyle(fontSize: 17)),
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color:
+                            expense.category.color?.withValues(alpha: 0.1) ??
+                            AppColors.bluish.withValues(alpha: 0.1),
+                        border: Border.all(
+                          color: expense.category.color ?? AppColors.bluish,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            expense.category.name,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              // color: AppColors.goldPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              Center(
+                child: Text(
+                  '${expense.amount.toStringAsFixed(2)} KM',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

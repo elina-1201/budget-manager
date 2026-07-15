@@ -21,6 +21,7 @@ dependencies:
   sqflite: ^2.4.3
   path_provider: ^2.1.6
   flutter_colorpicker: ^1.1.0
+  sliver_tools: ^0.2.12
   # device_info_plus: ^13.1.0
 
 dev_dependencies:

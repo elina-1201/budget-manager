@@ -15,6 +15,7 @@ abstract class AppComponentThemes {
   static const appBar = AppBarTheme(
     backgroundColor: AppColors.backgroundDark,
     foregroundColor: AppColors.textPrimary,
+    surfaceTintColor: AppColors.backgroundLight,
     elevation: 0,
     centerTitle: true,
     titleTextStyle: TextStyle(
